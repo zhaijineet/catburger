@@ -24,7 +24,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = CatBurger.MOD_ID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = CatBurger.MOD_ID)
 public class CatBurgerItem extends Item implements ICurioItem {
     public CatBurgerItem() {
         super(new Item.Properties().stacksTo(1));
