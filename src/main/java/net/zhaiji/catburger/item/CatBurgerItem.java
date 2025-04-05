@@ -18,6 +18,7 @@ import net.zhaiji.catburger.init.InitItem;
 import net.zhaiji.catburger.network.CatBurgerPacket;
 import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
@@ -46,13 +47,17 @@ public class CatBurgerItem extends Item implements ICurioItem {
     @SubscribeEvent
     public static void LivingDeathEvent(LivingDeathEvent event) {
         if (event.getEntity() instanceof Player player && !player.getCooldowns().isOnCooldown(InitItem.CAT_BURGER.get())) {
-            player.setHealth(Config.health_restoration_form_totem);
-            player.getFoodData().setFoodLevel(Config.food_restoration_form_totem);
-            player.getFoodData().setSaturation(Config.saturation_restoration_form_totem);
-            player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), Config.totem_cooldown);
-            player.level().broadcastEntityEvent(player, (byte) 35);
-            CatBurgerPacket.sendToClient(new PlayerDeathPacket(), (ServerPlayer) player);
-            event.setCanceled(true);
+            CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
+                if(!iCuriosItemHandler.findCurios(InitItem.CAT_BURGER.get()).isEmpty()){
+                    player.setHealth(Config.health_restoration_form_totem);
+                    player.getFoodData().setFoodLevel(Config.food_restoration_form_totem);
+                    player.getFoodData().setSaturation(Config.saturation_restoration_form_totem);
+                    player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), Config.totem_cooldown);
+                    player.level().broadcastEntityEvent(player, (byte) 35);
+                    CatBurgerPacket.sendToClient(new PlayerDeathPacket(), (ServerPlayer) player);
+                    event.setCanceled(true);
+                }
+            });
         }
     }
 
