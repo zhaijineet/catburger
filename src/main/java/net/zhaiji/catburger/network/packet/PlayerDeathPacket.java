@@ -1,32 +1,33 @@
 package net.zhaiji.catburger.network.packet;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.zhaiji.catburger.CatBurger;
 import net.zhaiji.catburger.init.InitItem;
 
-import java.util.function.Supplier;
+public record PlayerDeathPacket() implements CustomPacketPayload {
+    public static final Type<PlayerDeathPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CatBurger.MOD_ID, "player_death_packet"));
 
-public class PlayerDeathPacket {
-    public void encode(FriendlyByteBuf buf) {
+    public static final StreamCodec<ByteBuf, PlayerDeathPacket> STREAM_CODEC = StreamCodec.unit(new PlayerDeathPacket());
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static PlayerDeathPacket decode(FriendlyByteBuf buf) {
-        return new PlayerDeathPacket();
-    }
-
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        Minecraft minecraft = Minecraft.getInstance();
-        context.enqueueWork(() -> {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+    public static void handle(final PlayerDeathPacket packet, final IPayloadContext context) {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            Minecraft minecraft = Minecraft.getInstance();
+            context.enqueueWork(() -> {
                 minecraft.gameRenderer.displayItemActivation(new ItemStack(InitItem.CAT_BURGER.get()));
-                System.out.println("Kitty you can has cheese burger");
             });
-        });
-        context.setPacketHandled(true);
+        }
     }
 }

@@ -18,7 +18,7 @@
     " A "
   ],
   "result": {
-    "item": "catburger:cat_burger"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "catburger:cat_burger"
+  }
 }

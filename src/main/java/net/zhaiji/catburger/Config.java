@@ -1,17 +1,19 @@
 package net.zhaiji.catburger;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
-@Mod.EventBusSubscriber(modid = CatBurger.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
+// Demonstrates how to use Neo's config APIs
+@EventBusSubscriber(modid = CatBurger.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class Config {
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder()
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
             .comment("config")
             .push("Config");
 
-    private static final ForgeConfigSpec.IntValue TOTEM_COOLDOWN_VALUE = BUILDER
+    private static final ModConfigSpec.IntValue TOTEM_COOLDOWN_VALUE = BUILDER
             .comment("totem effect cooldown(tick)")
             .defineInRange(
                     "totem_cooldown",
@@ -20,7 +22,7 @@ public class Config {
                     Integer.MAX_VALUE
             );
 
-    private static final ForgeConfigSpec.IntValue CURIOS_COOLDOWN_VALUE = BUILDER
+    private static final ModConfigSpec.IntValue CURIOS_COOLDOWN_VALUE = BUILDER
             .comment("totem effect cooldown(tick)")
             .defineInRange(
                     "curios_cooldown",
@@ -29,7 +31,7 @@ public class Config {
                     Integer.MAX_VALUE
             );
 
-    private static final ForgeConfigSpec.IntValue FOOD_RESTORATION_VALUE = BUILDER
+    private static final ModConfigSpec.IntValue FOOD_RESTORATION_VALUE = BUILDER
             .comment("food restoration form curios effect")
             .defineInRange(
                     "foodRestoration",
@@ -38,7 +40,7 @@ public class Config {
                     20
             );
 
-    private static final ForgeConfigSpec.IntValue HEALTH_VALUE = BUILDER
+    private static final ModConfigSpec.IntValue HEALTH_VALUE = BUILDER
             .comment("health restoration form totem effect")
             .defineInRange(
                     "health",
@@ -47,7 +49,7 @@ public class Config {
                     Integer.MAX_VALUE
             );
 
-    private static final ForgeConfigSpec.IntValue FOOD_VALUE = BUILDER
+    private static final ModConfigSpec.IntValue FOOD_VALUE = BUILDER
             .comment("food restoration form totem effect")
             .defineInRange(
                     "foodLevel",
@@ -56,7 +58,7 @@ public class Config {
                     20
             );
 
-    private static final ForgeConfigSpec.IntValue SATURATION_VALUE = BUILDER
+    private static final ModConfigSpec.IntValue SATURATION_VALUE = BUILDER
             .comment("saturation restoration form totem effect")
             .defineInRange(
                     "saturation",
@@ -65,7 +67,7 @@ public class Config {
                     20
             );
 
-    public static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ModConfigSpec SPEC = BUILDER.build();
 
     public static int totem_cooldown;
     public static int curios_cooldown;

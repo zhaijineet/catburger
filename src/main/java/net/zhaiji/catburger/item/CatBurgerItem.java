@@ -1,32 +1,26 @@
 package net.zhaiji.catburger.item;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.zhaiji.catburger.CatBurger;
 import net.zhaiji.catburger.Config;
 import net.zhaiji.catburger.init.InitItem;
-import net.zhaiji.catburger.network.CatBurgerPacket;
 import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
-import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import java.util.List;
-
-@Mod.EventBusSubscriber(modid = CatBurger.MOD_ID)
+@EventBusSubscriber(modid = CatBurger.MOD_ID)
 public class CatBurgerItem extends Item implements ICurioItem {
     public CatBurgerItem() {
-        super(new Item.Properties().stacksTo(1));
+        super(new Properties().stacksTo(1));
     }
 
     @Override
@@ -53,16 +47,10 @@ public class CatBurgerItem extends Item implements ICurioItem {
                     player.getFoodData().setSaturation(Config.saturation_restoration_form_totem);
                     player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), Config.totem_cooldown);
                     player.level().broadcastEntityEvent(player, (byte) 35);
-                    CatBurgerPacket.sendToClient(new PlayerDeathPacket(), (ServerPlayer) player);
+                    PacketDistributor.sendToPlayer((ServerPlayer) player, new PlayerDeathPacket());
                     event.setCanceled(true);
                 }
             });
         }
-    }
-
-    @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
-        list.add(Component.translatable("item.catburger.cat_burger.tooltip"));
     }
 }

@@ -4,7 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zhaiji.catburger.CatBurger;
 
 import java.util.function.Supplier;
@@ -22,4 +22,5 @@ public class InitCreativeModeTab {
                     }))
                     .build()
     );
+
 }

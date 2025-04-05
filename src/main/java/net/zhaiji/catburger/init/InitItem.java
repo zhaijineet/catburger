@@ -1,14 +1,16 @@
 package net.zhaiji.catburger.init;
 
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.zhaiji.catburger.CatBurger;
 import net.zhaiji.catburger.item.CatBurgerItem;
 
 public class InitItem {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CatBurger.MOD_ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CatBurger.MOD_ID);
 
-    public static final RegistryObject<Item> CAT_BURGER = ITEMS.register("cat_burger", CatBurgerItem::new);
+    public static final DeferredItem<Item> CAT_BURGER = ITEMS.register(
+            "cat_burger",
+            CatBurgerItem::new
+    );
 }

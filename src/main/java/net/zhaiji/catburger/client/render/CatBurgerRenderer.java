@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +37,7 @@ public class CatBurgerRenderer implements ICurioRenderer {
                                                                           float headPitch) {
         LivingEntity livingEntity = slotContext.entity();
         Minecraft client = Minecraft.getInstance();
-        BakedModel model = client.getModelManager().getModel(new ModelResourceLocation(CatBurger.MOD_ID, "cat_burger", "inventory"));
+        BakedModel model = client.getModelManager().getModel(ModelResourceLocation.inventory(ResourceLocation.fromNamespaceAndPath(CatBurger.MOD_ID, "cat_burger")));
         matrixStack.pushPose();
         ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
         matrixStack.mulPose(new Quaternionf().rotateZ((float) Math.toRadians(180)));
