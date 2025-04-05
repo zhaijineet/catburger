@@ -17,13 +17,13 @@ import net.zhaiji.catburger.network.CatBurgerPacket;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
-@Mod(Catburger.MOD_ID)
-public class Catburger {
+@Mod(CatBurger.MOD_ID)
+public class CatBurger {
     public static final String MOD_ID = "catburger";
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public Catburger() {
+    public CatBurger() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         InitItem.ITEMS.register(modEventBus);

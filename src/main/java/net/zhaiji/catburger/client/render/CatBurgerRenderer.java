@@ -12,7 +12,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.zhaiji.catburger.Catburger;
+import net.zhaiji.catburger.CatBurger;
 import org.joml.Quaternionf;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
@@ -36,7 +36,7 @@ public class CatBurgerRenderer implements ICurioRenderer {
                                                                           float headPitch) {
         LivingEntity livingEntity = slotContext.entity();
         Minecraft client = Minecraft.getInstance();
-        BakedModel model = client.getModelManager().getModel(new ModelResourceLocation(Catburger.MOD_ID, "cat_burger", "inventory"));
+        BakedModel model = client.getModelManager().getModel(new ModelResourceLocation(CatBurger.MOD_ID, "cat_burger", "inventory"));
         matrixStack.pushPose();
         ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
         matrixStack.mulPose(new Quaternionf().rotateZ((float) Math.toRadians(180)));

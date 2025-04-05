@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.zhaiji.catburger.Catburger;
+import net.zhaiji.catburger.CatBurger;
 import net.zhaiji.catburger.Config;
 import net.zhaiji.catburger.init.InitItem;
 import net.zhaiji.catburger.network.CatBurgerPacket;
@@ -24,7 +24,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Catburger.MOD_ID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = CatBurger.MOD_ID, value = Dist.CLIENT)
 public class CatBurgerItem extends Item implements ICurioItem {
     public CatBurgerItem() {
         super(new Item.Properties().stacksTo(1));
