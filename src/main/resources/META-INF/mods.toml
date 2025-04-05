@@ -42,6 +42,7 @@ authors = "${mod_authors}" #optional
 description = '''${mod_description}'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies."${mod_id}"]] #optional
+
 # the modid of the dependency
 modId = "forge" #mandatory
 # Does this dependency have to exist - if not, ordering below must be specified
@@ -61,3 +62,9 @@ mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+[[dependencies."${mod_id}"]]
+modId="curios"
+mandatory=true
+versionRange="[5.12.1+1.20.1,)" #很奇怪，不能识别gradle.properties里的变量，我就手动标了
+ordering="NONE"
+side="BOTH"
