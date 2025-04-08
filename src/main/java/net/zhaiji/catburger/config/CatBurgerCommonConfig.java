@@ -1,15 +1,39 @@
-package net.zhaiji.catburger;
+package net.zhaiji.catburger.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.zhaiji.catburger.CatBurger;
 
 @Mod.EventBusSubscriber(modid = CatBurger.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config {
+public class CatBurgerCommonConfig {
+    public static boolean totem_effect_active;
+    public static boolean wake_up_can_reset_cooldown;
+    public static int totem_cooldown;
+    public static int curios_cooldown;
+    public static int food_restoration_form_curios;
+    public static int health_restoration_form_totem;
+    public static int food_restoration_form_totem;
+    public static int saturation_restoration_form_totem;
+
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder()
             .comment("config")
             .push("Config");
+
+    private static final ForgeConfigSpec.BooleanValue TOTEM_EFFECT_ACTIVE = BUILDER
+            .comment("totem effect active?")
+            .define(
+                    "active",
+                    true
+            );
+
+    private static final ForgeConfigSpec.BooleanValue WAKE_UP_CAN_RESET_COOLDOWN = BUILDER
+            .comment("wake up can reset totem effect cooldown?")
+            .define(
+                    "can_reset",
+                    true
+            );
 
     private static final ForgeConfigSpec.IntValue TOTEM_COOLDOWN_VALUE = BUILDER
             .comment("totem effect cooldown(tick)")
@@ -67,22 +91,20 @@ public class Config {
 
     public static final ForgeConfigSpec SPEC = BUILDER.build();
 
-    public static int totem_cooldown;
-    public static int curios_cooldown;
-    public static int food_restoration_form_curios;
-    public static int health_restoration_form_totem;
-    public static int food_restoration_form_totem;
-    public static int saturation_restoration_form_totem;
-
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
-        totem_cooldown = TOTEM_COOLDOWN_VALUE.get();
-        curios_cooldown = CURIOS_COOLDOWN_VALUE.get();
+        if (event.getConfig().getSpec() == SPEC) {
+            totem_effect_active = TOTEM_EFFECT_ACTIVE.get();
+            wake_up_can_reset_cooldown = WAKE_UP_CAN_RESET_COOLDOWN.get();
 
-        food_restoration_form_curios = FOOD_RESTORATION_VALUE.get();
+            totem_cooldown = TOTEM_COOLDOWN_VALUE.get();
+            curios_cooldown = CURIOS_COOLDOWN_VALUE.get();
 
-        health_restoration_form_totem = HEALTH_VALUE.get();
-        food_restoration_form_totem = FOOD_VALUE.get();
-        saturation_restoration_form_totem = SATURATION_VALUE.get();
+            food_restoration_form_curios = FOOD_RESTORATION_VALUE.get();
+
+            health_restoration_form_totem = HEALTH_VALUE.get();
+            food_restoration_form_totem = FOOD_VALUE.get();
+            saturation_restoration_form_totem = SATURATION_VALUE.get();
+        }
     }
 }
