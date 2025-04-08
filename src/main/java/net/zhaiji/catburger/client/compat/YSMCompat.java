@@ -18,6 +18,9 @@ import net.zhaiji.catburger.config.CatBurgerClientConfig;
 import net.zhaiji.catburger.init.InitItem;
 import org.joml.Quaternionf;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
+
+import java.util.List;
 
 public class YSMCompat {
     private static final String YSM_ID = "yes_steve_model";
@@ -45,8 +48,8 @@ public class YSMCompat {
         MultiBufferSource renderTypeBuffer = event.getMultiBufferSource();
         int light = event.getPackedLight();
         CuriosApi.getCuriosInventory(livingEntity).ifPresent(iCuriosItemHandler -> {
-            if (!iCuriosItemHandler.findCurios(item).isEmpty()) {
-                if (!iCuriosItemHandler.findCurios(item).get(0).slotContext().visible()) return;
+            List<SlotResult> list = iCuriosItemHandler.findCurios(item);
+            if (!list.isEmpty() && list.get(0).slotContext().visible()) {
                 Minecraft minecraft = Minecraft.getInstance();
                 BakedModel model = CatBurgerRenderer.getModel();
                 matrixStack.pushPose();
