@@ -68,7 +68,7 @@ public class CatBurgerClientConfig {
             .comment("left & right offset")
             .defineInRange(
                     "left_right_offset",
-                    -1,
+                    -0.8,
                     -100d,
                     100d
             );

@@ -55,11 +55,11 @@ public class CatBurgerRenderer implements ICurioRenderer {
         double yOffset = 0;
         double zOffset = 0;
 
-        xOffset -= Math.cos(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
-        zOffset += Math.sin(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
+        xOffset += Math.cos(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
+        zOffset -= Math.sin(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
 
         yOffset += CatBurgerRenderer.getFloatSpeed(livingEntity);
-        yOffset += CatBurgerClientConfig.vertical_offset;
+        yOffset -= CatBurgerClientConfig.vertical_offset;
         ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
 
         xOffset += Math.cos(yawRadians) * CatBurgerClientConfig.left_right_offset;

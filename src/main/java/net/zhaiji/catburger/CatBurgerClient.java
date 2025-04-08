@@ -1,5 +1,6 @@
 package net.zhaiji.catburger;
 
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -10,7 +11,7 @@ import net.zhaiji.catburger.client.render.CatBurgerRenderer;
 import net.zhaiji.catburger.init.InitItem;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
-@Mod(CatBurger.MOD_ID)
+@Mod(value = CatBurger.MOD_ID,dist = Dist.CLIENT)
 public class CatBurgerClient {
     public CatBurgerClient(IEventBus modEventBus, ModContainer modContainer) {
         if (YSMCompat.isLoad()) {
