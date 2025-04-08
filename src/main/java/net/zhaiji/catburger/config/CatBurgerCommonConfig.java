@@ -1,17 +1,39 @@
-package net.zhaiji.catburger;
+package net.zhaiji.catburger.config;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.zhaiji.catburger.CatBurger;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Neo's config APIs
 @EventBusSubscriber(modid = CatBurger.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-public class Config {
+public class CatBurgerCommonConfig {
+    public static boolean totem_effect_active;
+    public static boolean wake_up_can_reset_cooldown;
+    public static int totem_cooldown;
+    public static int curios_cooldown;
+    public static int food_restoration_form_curios;
+    public static int health_restoration_form_totem;
+    public static int food_restoration_form_totem;
+    public static int saturation_restoration_form_totem;
+
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
             .comment("config")
             .push("Config");
+
+    private static final ModConfigSpec.BooleanValue TOTEM_EFFECT_ACTIVE = BUILDER
+            .comment("totem effect active?")
+            .define(
+                    "active",
+                    true
+            );
+
+    private static final ModConfigSpec.BooleanValue WAKE_UP_CAN_RESET_COOLDOWN = BUILDER
+            .comment("wake up can reset totem effect cooldown?")
+            .define(
+                    "can_reset",
+                    true
+            );
 
     private static final ModConfigSpec.IntValue TOTEM_COOLDOWN_VALUE = BUILDER
             .comment("totem effect cooldown(tick)")
@@ -69,22 +91,20 @@ public class Config {
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
-    public static int totem_cooldown;
-    public static int curios_cooldown;
-    public static int food_restoration_form_curios;
-    public static int health_restoration_form_totem;
-    public static int food_restoration_form_totem;
-    public static int saturation_restoration_form_totem;
-
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
-        totem_cooldown = TOTEM_COOLDOWN_VALUE.get();
-        curios_cooldown = CURIOS_COOLDOWN_VALUE.get();
+        if (event.getConfig().getSpec() == SPEC) {
+            totem_effect_active = TOTEM_EFFECT_ACTIVE.get();
+            wake_up_can_reset_cooldown = WAKE_UP_CAN_RESET_COOLDOWN.get();
 
-        food_restoration_form_curios = FOOD_RESTORATION_VALUE.get();
+            totem_cooldown = TOTEM_COOLDOWN_VALUE.get();
+            curios_cooldown = CURIOS_COOLDOWN_VALUE.get();
 
-        health_restoration_form_totem = HEALTH_VALUE.get();
-        food_restoration_form_totem = FOOD_VALUE.get();
-        saturation_restoration_form_totem = SATURATION_VALUE.get();
+            food_restoration_form_curios = FOOD_RESTORATION_VALUE.get();
+
+            health_restoration_form_totem = HEALTH_VALUE.get();
+            food_restoration_form_totem = FOOD_VALUE.get();
+            saturation_restoration_form_totem = SATURATION_VALUE.get();
+        }
     }
 }
