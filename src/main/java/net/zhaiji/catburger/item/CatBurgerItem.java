@@ -38,7 +38,9 @@ public class CatBurgerItem extends Item implements ICurioItem {
         if (slotContext.entity() instanceof Player player && player.tickCount % CatBurgerCommonConfig.curios_cooldown == 0) {
             FoodData foodData = player.getFoodData();
             int foodLevel = foodData.getFoodLevel();
-            foodData.setFoodLevel(Math.min(foodLevel + CatBurgerCommonConfig.food_restoration_form_curios, CatBurgerCommonConfig.food_max_restoration));
+            if (foodLevel < CatBurgerCommonConfig.food_max_restoration) {
+                foodData.setFoodLevel(Math.min(foodLevel + CatBurgerCommonConfig.food_restoration_form_curios, CatBurgerCommonConfig.food_max_restoration));
+            }
         }
     }
 
