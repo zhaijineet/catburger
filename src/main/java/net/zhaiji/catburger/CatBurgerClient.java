@@ -11,7 +11,7 @@ import net.zhaiji.catburger.client.render.CatBurgerRenderer;
 import net.zhaiji.catburger.init.InitItem;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
-@Mod(value = CatBurger.MOD_ID,dist = Dist.CLIENT)
+@Mod(value = CatBurger.MOD_ID, dist = Dist.CLIENT)
 public class CatBurgerClient {
     public CatBurgerClient(IEventBus modEventBus, ModContainer modContainer) {
         if (YSMCompat.isLoad()) {

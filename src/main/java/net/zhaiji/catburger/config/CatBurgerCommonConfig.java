@@ -13,6 +13,7 @@ public class CatBurgerCommonConfig {
     public static int totem_cooldown;
     public static int curios_cooldown;
     public static int food_restoration_form_curios;
+    public static int food_max_restoration;
     public static int health_restoration_form_totem;
     public static int food_restoration_form_totem;
     public static int saturation_restoration_form_totem;
@@ -48,7 +49,7 @@ public class CatBurgerCommonConfig {
             .comment("totem effect cooldown(tick)")
             .defineInRange(
                     "curios_cooldown",
-                    600,
+                    1200,
                     0,
                     Integer.MAX_VALUE
             );
@@ -59,6 +60,15 @@ public class CatBurgerCommonConfig {
                     "foodRestoration",
                     1,
                     0,
+                    20
+            );
+
+    private static final ModConfigSpec.IntValue FOOD_MAX_RESTORATION = BUILDER
+            .comment("food max restoration")
+            .defineInRange(
+                    "foodMaxRestoration",
+                    18,
+                    1,
                     20
             );
 
@@ -101,6 +111,7 @@ public class CatBurgerCommonConfig {
             curios_cooldown = CURIOS_COOLDOWN_VALUE.get();
 
             food_restoration_form_curios = FOOD_RESTORATION_VALUE.get();
+            food_max_restoration = FOOD_MAX_RESTORATION.get();
 
             health_restoration_form_totem = HEALTH_VALUE.get();
             food_restoration_form_totem = FOOD_VALUE.get();
