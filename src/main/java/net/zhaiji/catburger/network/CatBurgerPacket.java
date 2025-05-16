@@ -1,34 +1,30 @@
 package net.zhaiji.catburger.network;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
 import net.zhaiji.catburger.CatBurger;
 import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
 
 public class CatBurgerPacket {
-    public static final String VERSION = "1.0";
+    // 定义网络包ID
+    public static final ResourceLocation PLAYER_DEATH_PACKET_ID = new ResourceLocation(CatBurger.MOD_ID, "player_death");
 
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(CatBurger.MOD_ID, "main"),
-            () -> VERSION,
-            VERSION::equals,
-            VERSION::equals
-    );
-
+    // 注册网络包
     public static void registry() {
-        int id = 0;
-        INSTANCE.messageBuilder(PlayerDeathPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(PlayerDeathPacket::encode)
-                .decoder(PlayerDeathPacket::decode)
-                .consumerMainThread(PlayerDeathPacket::handle)
-                .add();
+        // 在客户端注册接收器
+        ClientPlayNetworking.registerGlobalReceiver(PLAYER_DEATH_PACKET_ID, (client, handler, buf, responseSender) -> {
+            PlayerDeathPacket packet = PlayerDeathPacket.decode(buf);
+            client.execute(packet::handle);
+        });
     }
 
-    public static <MSG> void sendToClient(MSG msg, ServerPlayer serverPlayer) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), msg);
+    // 发送网络包到客户端
+    public static void sendToClient(PlayerDeathPacket msg, ServerPlayer serverPlayer) {
+        var buf = PacketByteBufs.create();
+        msg.encode(buf);
+        ServerPlayNetworking.send(serverPlayer, PLAYER_DEATH_PACKET_ID, buf);
     }
 }

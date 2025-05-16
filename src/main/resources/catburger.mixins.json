@@ -5,8 +5,11 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "catburger.refmap.json",
   "mixins": [
+    "LivingEntityMixin",
+    "PlayerSleepMixin"
   ],
   "client": [
+    "LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

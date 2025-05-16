@@ -1,49 +1,83 @@
 package net.zhaiji.catburger.item;
 
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketItem;
+import dev.emi.trinkets.api.TrinketsApi;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.zhaiji.catburger.CatBurger;
-import net.zhaiji.catburger.config.CatBurgerCommonConfig;
+import net.zhaiji.catburger.config.CatBurgerConfig;
 import net.zhaiji.catburger.init.InitItem;
 import net.zhaiji.catburger.network.CatBurgerPacket;
 import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
+import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = CatBurger.MOD_ID)
-public class CatBurgerItem extends Item implements ICurioItem {
+public class CatBurgerItem extends TrinketItem {
     public CatBurgerItem() {
         super(new Item.Properties().stacksTo(1));
+
+        // 注册Fabric事件监听器
+        registerEventHandlers();
     }
 
-    @Override
-    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
-        return true;
+    private void registerEventHandlers() {
+
+        // 玩家睡醒事件处理 - 使用Fabric的ServerPlayerEvents
+        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            // 这不是完全等同于睡醒事件，但可以作为一个触发点
+            // 真正的睡醒事件可能需要使用Mixin来实现
+            if (alive) {
+                handlePlayerWakeUp(newPlayer);
+            }
+        });
+
+        // Tick事件处理
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                checkAndRestoreFood(player);
+            }
+        });
     }
 
-    @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (slotContext.entity() instanceof Player player && player.tickCount % CatBurgerCommonConfig.curios_cooldown == 0) {
+    private void checkAndRestoreFood(Player player) {
+        if (player.tickCount % CatBurgerConfig.get().trinket_cooldown != 0) return;
+
+        // 检查玩家是否装备了猫汉堡
+        boolean hasCatBurger = TrinketsApi.getTrinketComponent(player)
+                .map(component -> component.isEquipped(InitItem.CAT_BURGER))
+                .orElse(false);
+
+        if (hasCatBurger) {
             FoodData foodData = player.getFoodData();
             int foodLevel = foodData.getFoodLevel();
-            if (foodLevel < CatBurgerCommonConfig.food_max_restoration) {
-                foodData.setFoodLevel(Math.min(foodLevel + CatBurgerCommonConfig.food_restoration_form_curios, CatBurgerCommonConfig.food_max_restoration));
+            if (foodLevel < CatBurgerConfig.get().food_max_restoration) {
+                foodData.setFoodLevel(Math.min(foodLevel + CatBurgerConfig.get().food_restoration_form_trinket,
+                        CatBurgerConfig.get().food_max_restoration));
             }
         }
+    }
+
+    @Override
+    public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        // Trinkets的tick方法，不需要额外实现，因为我们使用ServerTickEvents
+    }
+
+    @Override
+    public boolean canEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        return true;
     }
 
     @Override
@@ -52,32 +86,39 @@ public class CatBurgerItem extends Item implements ICurioItem {
         list.add(Component.translatable("item.catburger.cat_burger.tooltip"));
     }
 
-    @SubscribeEvent
-    public static void LivingDeathEvent(LivingDeathEvent event) {
-        if (!CatBurgerCommonConfig.totem_effect_active) return;
-        if (event.getEntity() instanceof Player player && !player.getCooldowns().isOnCooldown(InitItem.CAT_BURGER.get())) {
-            CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
-                if(!iCuriosItemHandler.findCurios(InitItem.CAT_BURGER.get()).isEmpty()){
-                    player.setHealth(CatBurgerCommonConfig.health_restoration_form_totem);
-                    player.getFoodData().setFoodLevel(CatBurgerCommonConfig.food_restoration_form_totem);
-                    player.getFoodData().setSaturation(CatBurgerCommonConfig.saturation_restoration_form_totem);
-                    player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), CatBurgerCommonConfig.totem_cooldown);
-                    player.level().broadcastEntityEvent(player, (byte) 35);
-                    CatBurgerPacket.sendToClient(new PlayerDeathPacket(), (ServerPlayer) player);
-                    event.setCanceled(true);
-                }
-            });
+    // 处理玩家死亡事件，返回是否成功处理
+    public static boolean handlePlayerDeath(Player player, DamageSource source) {
+        if (!CatBurgerConfig.get().totem_effect_active) return false;
+
+        if (!player.getCooldowns().isOnCooldown(InitItem.CAT_BURGER)) {
+            return Optional.ofNullable(TrinketsApi.getTrinketComponent(player).orElse(null))
+                    .map(component -> {
+                        if (component.isEquipped(InitItem.CAT_BURGER)) {
+                            player.setHealth(CatBurgerConfig.get().health_restoration_form_totem);
+                            player.getFoodData().setFoodLevel(CatBurgerConfig.get().food_restoration_form_totem);
+                            player.getFoodData().setSaturation(CatBurgerConfig.get().saturation_restoration_form_totem);
+                            player.getCooldowns().addCooldown(InitItem.CAT_BURGER, CatBurgerConfig.get().totem_cooldown);
+                            player.level().broadcastEntityEvent(player, (byte) 35);
+                            if (player instanceof ServerPlayer serverPlayer) {
+                                CatBurgerPacket.sendToClient(new PlayerDeathPacket(), serverPlayer);
+                            }
+                            return true;
+                        }
+                        return false;
+                    }).orElse(false);
         }
+        return false;
     }
 
-    @SubscribeEvent
-    public static void PlayerWakeUpEvent(PlayerWakeUpEvent event) {
-        if (!CatBurgerCommonConfig.wake_up_can_reset_cooldown) return;
-        Player player = event.getEntity();
-        CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
-            if (!iCuriosItemHandler.findCurios(InitItem.CAT_BURGER.get()).isEmpty()) {
-                player.getCooldowns().removeCooldown(InitItem.CAT_BURGER.get());
+    // 处理玩家睡醒事件
+    public static void handlePlayerWakeUp (Player player) {
+        if (!CatBurgerConfig.get().wake_up_can_reset_cooldown) return;
+
+        TrinketsApi.getTrinketComponent(player).ifPresent(component -> {
+            if (component.isEquipped(InitItem.CAT_BURGER)) {
+                player.getCooldowns().removeCooldown(InitItem.CAT_BURGER);
             }
         });
     }
+
 }
