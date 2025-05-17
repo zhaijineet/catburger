@@ -14,11 +14,11 @@
   "text.autoconfig.catburger.option.health_restoration_form_totem": "Health restoration from totem effect",
   "text.autoconfig.catburger.option.food_restoration_form_totem": "Food restoration from totem effect",
   "text.autoconfig.catburger.option.saturation_restoration_form_totem": "Saturation restoration from totem effect",
-  "text.autoconfig.catburger.option.client_config": "Client Config",
-  "text.autoconfig.catburger.option.scale": "Scale",
-  "text.autoconfig.catburger.option.float_distance": "Float distance (blocks)",
-  "text.autoconfig.catburger.option.time": "Time to complete a float cycle (tick)",
-  "text.autoconfig.catburger.option.front_back_offset": "Front & back offset",
-  "text.autoconfig.catburger.option.vertical_offset": "Vertical offset",
-  "text.autoconfig.catburger.option.left_right_offset": "Left & right offset"
+  "text.autoconfig.catburger.option.client": "Client Config",
+  "text.autoconfig.catburger.option.client.scale": "Scale",
+  "text.autoconfig.catburger.option.client.float_distance": "Float distance (blocks)",
+  "text.autoconfig.catburger.option.client.time": "Time to complete a float cycle (tick)",
+  "text.autoconfig.catburger.option.client.front_back_offset": "Front & back offset",
+  "text.autoconfig.catburger.option.client.vertical_offset": "Vertical offset",
+  "text.autoconfig.catburger.option.client.left_right_offset": "Left & right offset"
 }

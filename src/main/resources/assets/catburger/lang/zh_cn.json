@@ -14,11 +14,11 @@
   "text.autoconfig.catburger.option.health_restoration_form_totem": "图腾效果恢复的生命值",
   "text.autoconfig.catburger.option.food_restoration_form_totem": "图腾效果恢复的饥饿值",
   "text.autoconfig.catburger.option.saturation_restoration_form_totem": "图腾效果恢复的饱食度",
-  "text.autoconfig.catburger.option.client_config": "客户端配置",
-  "text.autoconfig.catburger.option.scale": "缩放",
-  "text.autoconfig.catburger.option.float_distance": "浮动距离（方块）",
-  "text.autoconfig.catburger.option.time": "完成一个浮动周期的时间（刻）",
-  "text.autoconfig.catburger.option.front_back_offset": "前后偏移",
-  "text.autoconfig.catburger.option.vertical_offset": "垂直偏移",
-  "text.autoconfig.catburger.option.left_right_offset": "左右偏移"
+  "text.autoconfig.catburger.option.client": "客户端配置",
+  "text.autoconfig.catburger.option.client.scale": "缩放",
+  "text.autoconfig.catburger.option.client.float_distance": "浮动距离（方块）",
+  "text.autoconfig.catburger.option.client.time": "完成一个浮动周期的时间（刻）",
+  "text.autoconfig.catburger.option.client.front_back_offset": "前后偏移",
+  "text.autoconfig.catburger.option.client.vertical_offset": "垂直偏移",
+  "text.autoconfig.catburger.option.client.left_right_offset": "左右偏移"
 }

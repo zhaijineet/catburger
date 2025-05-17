@@ -14,11 +14,11 @@
   "text.autoconfig.catburger.option.health_restoration_form_totem": "トーテム効果による体力回復",
   "text.autoconfig.catburger.option.food_restoration_form_totem": "トーテム効果による食料回復",
   "text.autoconfig.catburger.option.saturation_restoration_form_totem": "トーテム効果による満腹度回復",
-  "text.autoconfig.catburger.option.client_config": "クライアント コンフィグ",
-  "text.autoconfig.catburger.option.scale": "スケール",
-  "text.autoconfig.catburger.option.float_distance": "浮動距離（ブロック）",
-  "text.autoconfig.catburger.option.time": "浮動サイクル完了時間（ティック）",
-  "text.autoconfig.catburger.option.front_back_offset": "前後オフセット",
-  "text.autoconfig.catburger.option.vertical_offset": "垂直オフセット",
-  "text.autoconfig.catburger.option.left_right_offset": "左右オフセット"
+  "text.autoconfig.catburger.option.client": "クライアント コンフィグ",
+  "text.autoconfig.catburger.option.client.scale": "スケール",
+  "text.autoconfig.catburger.option.client.float_distance": "浮動距離（ブロック）",
+  "text.autoconfig.catburger.option.client.time": "浮動サイクル完了時間（ティック）",
+  "text.autoconfig.catburger.option.client.front_back_offset": "前後オフセット",
+  "text.autoconfig.catburger.option.client.vertical_offset": "垂直オフセット",
+  "text.autoconfig.catburger.option.client.left_right_offset": "左右オフセット"
 }
