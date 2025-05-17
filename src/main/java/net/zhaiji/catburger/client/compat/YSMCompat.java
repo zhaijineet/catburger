@@ -19,7 +19,6 @@ import net.zhaiji.catburger.config.CatBurgerConfig;
 import net.zhaiji.catburger.init.InitItem;
 import org.joml.Quaternionf;
 
-import java.util.List;
 import java.util.Optional;
 
 public class YSMCompat {
@@ -32,7 +31,6 @@ public class YSMCompat {
         return FabricLoader.getInstance().isModLoaded(YSM_ID);
     }
 
-    // LivingEntityRenderer render
     private static void getHeadRot(float partialTicks, LivingEntity entity) {
         float yaw = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
         float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
@@ -41,15 +39,12 @@ public class YSMCompat {
         headPitch = pitch;
     }
 
-    // 在Fabric中，我们需要使用EntityRenderEvents或Mixin来替代Forge的RenderLivingEvent
     public static void renderLivingPost(LivingEntity livingEntity, float partialTick, PoseStack matrixStack,
                                         MultiBufferSource renderTypeBuffer, int light) {
         Item item = InitItem.CAT_BURGER;
 
-        // 使用Trinkets API获取饰品组件
         Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
         if (component.isPresent()) {
-            // 直接使用TrinketComponent的isEquipped方法检查是否装备了猫汉堡物品
             boolean hasCatBurger = component.get().isEquipped(item);
 
 

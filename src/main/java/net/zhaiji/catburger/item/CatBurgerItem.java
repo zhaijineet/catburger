@@ -4,7 +4,6 @@ import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,28 +22,22 @@ import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CatBurgerItem extends TrinketItem {
     public CatBurgerItem() {
         super(new Item.Properties().stacksTo(1));
 
-        // 注册Fabric事件监听器
         registerEventHandlers();
     }
 
     private void registerEventHandlers() {
 
-        // 玩家睡醒事件处理 - 使用Fabric的ServerPlayerEvents
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-            // 这不是完全等同于睡醒事件，但可以作为一个触发点
-            // 真正的睡醒事件可能需要使用Mixin来实现
             if (alive) {
                 handlePlayerWakeUp(newPlayer);
             }
         });
 
-        // Tick事件处理
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 checkAndRestoreFood(player);
@@ -55,7 +48,6 @@ public class CatBurgerItem extends TrinketItem {
     private void checkAndRestoreFood(Player player) {
         if (player.tickCount % CatBurgerConfig.get().trinket_cooldown != 0) return;
 
-        // 检查玩家是否装备了猫汉堡
         boolean hasCatBurger = TrinketsApi.getTrinketComponent(player)
                 .map(component -> component.isEquipped(InitItem.CAT_BURGER))
                 .orElse(false);
@@ -72,7 +64,6 @@ public class CatBurgerItem extends TrinketItem {
 
     @Override
     public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        // Trinkets的tick方法，不需要额外实现，因为我们使用ServerTickEvents
     }
 
     @Override
@@ -86,12 +77,11 @@ public class CatBurgerItem extends TrinketItem {
         list.add(Component.translatable("item.catburger.cat_burger.tooltip"));
     }
 
-    // 处理玩家死亡事件，返回是否成功处理
     public static boolean handlePlayerDeath(Player player, DamageSource source) {
         if (!CatBurgerConfig.get().totem_effect_active) return false;
 
         if (!player.getCooldowns().isOnCooldown(InitItem.CAT_BURGER)) {
-            return Optional.ofNullable(TrinketsApi.getTrinketComponent(player).orElse(null))
+            return TrinketsApi.getTrinketComponent(player)
                     .map(component -> {
                         if (component.isEquipped(InitItem.CAT_BURGER)) {
                             player.setHealth(CatBurgerConfig.get().health_restoration_form_totem);
@@ -110,7 +100,6 @@ public class CatBurgerItem extends TrinketItem {
         return false;
     }
 
-    // 处理玩家睡醒事件
     public static void handlePlayerWakeUp (Player player) {
         if (!CatBurgerConfig.get().wake_up_can_reset_cooldown) return;
 

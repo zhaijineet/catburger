@@ -19,7 +19,7 @@ public class InitCreativeModeTab {
 
     public static final CreativeModeTab CATBURGER_TAB = FabricItemGroup.builder()
             .icon(() -> new ItemStack(InitItem.CAT_BURGER))
-            .title(Component.translatable("itemGroup." + CatBurger.MOD_ID + ".catburger_tab"))
+            .title(Component.translatable("creativetab." + CatBurger.MOD_ID + ".catburger_tab"))
             .displayItems((context, entries) -> {
                 entries.accept(InitItem.CAT_BURGER);
             })

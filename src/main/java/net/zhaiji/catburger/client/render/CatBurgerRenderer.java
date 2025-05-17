@@ -57,7 +57,6 @@ public class CatBurgerRenderer implements TrinketRenderer {
         yOffset += CatBurgerRenderer.getFloatSpeed(entity);
         yOffset -= CatBurgerConfig.get().client.vertical_offset;
 
-        // 使用Trinkets API的方式处理下蹲状态
         if (entity.isCrouching() && !entity.isSwimming() && !entity.isPassenger()) {
             matrices.translate(0.0F, 0.2F, 0.0F);
         }

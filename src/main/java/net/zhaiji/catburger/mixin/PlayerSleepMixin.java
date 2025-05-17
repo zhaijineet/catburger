@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
 public class PlayerSleepMixin {
-    @Inject(method = "stopSleeping", at = @At("HEAD"))
-    private void onWakeUp(CallbackInfo ci) {
+    @Inject(method = "stopSleepInBed(ZZ)V", at = @At("HEAD"))
+    private void onWakeUp(boolean resetSleepCounter, boolean updateList, CallbackInfo ci) {
         Player player = (Player)(Object)this;
         CatBurgerItem.handlePlayerWakeUp(player);
     }

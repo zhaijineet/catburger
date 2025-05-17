@@ -1,5 +1,24 @@
 {
   "item.catburger.cat_burger": "猫猫汉堡",
   "item.catburger.cat_burger.tooltip": "喵!",
-  "creativetab.catburger.catburger_tab": "猫猫汉堡"
+  "creativetab.catburger.catburger_tab": "猫猫汉堡",
+  "trinkets.slot.head.head": "猫猫",
+
+  "text.autoconfig.catburger.title": "猫猫汉堡 配置",
+  "text.autoconfig.catburger.option.totem_effect_active": "图腾效果是否激活",
+  "text.autoconfig.catburger.option.wake_up_can_reset_cooldown": "睡醒后是否重置图腾效果冷却",
+  "text.autoconfig.catburger.option.totem_cooldown": "图腾效果冷却时间（刻）",
+  "text.autoconfig.catburger.option.trinket_cooldown": "饰品效果冷却时间（刻）",
+  "text.autoconfig.catburger.option.food_restoration_form_trinket": "饰品效果恢复的饥饿值",
+  "text.autoconfig.catburger.option.food_max_restoration": "最大饥饿值恢复",
+  "text.autoconfig.catburger.option.health_restoration_form_totem": "图腾效果恢复的生命值",
+  "text.autoconfig.catburger.option.food_restoration_form_totem": "图腾效果恢复的饥饿值",
+  "text.autoconfig.catburger.option.saturation_restoration_form_totem": "图腾效果恢复的饱食度",
+  "text.autoconfig.catburger.option.client_config": "客户端配置",
+  "text.autoconfig.catburger.option.scale": "缩放",
+  "text.autoconfig.catburger.option.float_distance": "浮动距离（方块）",
+  "text.autoconfig.catburger.option.time": "完成一个浮动周期的时间（刻）",
+  "text.autoconfig.catburger.option.front_back_offset": "前后偏移",
+  "text.autoconfig.catburger.option.vertical_offset": "垂直偏移",
+  "text.autoconfig.catburger.option.left_right_offset": "左右偏移"
 }
