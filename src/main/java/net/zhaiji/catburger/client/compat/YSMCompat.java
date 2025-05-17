@@ -2,9 +2,6 @@ package net.zhaiji.catburger.client.compat;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -14,12 +11,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.fml.loading.LoadingModList;
 import net.zhaiji.catburger.client.render.CatBurgerRenderer;
-import net.zhaiji.catburger.config.CatBurgerConfig;
+import net.zhaiji.catburger.config.CatBurgerClientConfig;
 import net.zhaiji.catburger.init.InitItem;
 import org.joml.Quaternionf;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.Optional;
+import java.util.List;
 
 public class YSMCompat {
     private static final String YSM_ID = "yes_steve_model";
@@ -28,9 +29,10 @@ public class YSMCompat {
     private static float headPitch;
 
     public static boolean isLoad(){
-        return FabricLoader.getInstance().isModLoaded(YSM_ID);
+        return LoadingModList.get().getModFileById("yes_steve_model") != null;
     }
 
+    // LivingEntityRenderer render
     private static void getHeadRot(float partialTicks, LivingEntity entity) {
         float yaw = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
         float pitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
@@ -39,31 +41,31 @@ public class YSMCompat {
         headPitch = pitch;
     }
 
-    public static void renderLivingPost(LivingEntity livingEntity, float partialTick, PoseStack matrixStack,
-                                        MultiBufferSource renderTypeBuffer, int light) {
-        Item item = InitItem.CAT_BURGER;
-
-        Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-        if (component.isPresent()) {
-            boolean hasCatBurger = component.get().isEquipped(item);
-
-
-            if (hasCatBurger) {
+    public static void RenderLivingEvent(RenderLivingEvent.Post event) {
+        Item item = InitItem.CAT_BURGER.get();
+        LivingEntity livingEntity = event.getEntity();
+        PoseStack matrixStack = event.getPoseStack();
+        MultiBufferSource renderTypeBuffer = event.getMultiBufferSource();
+        int light = event.getPackedLight();
+        CuriosApi.getCuriosInventory(livingEntity).ifPresent(iCuriosItemHandler -> {
+            List<SlotResult> list = iCuriosItemHandler.findCurios(item);
+            if (!list.isEmpty() && list.get(0).slotContext().visible()) {
                 Minecraft minecraft = Minecraft.getInstance();
                 BakedModel model = CatBurgerRenderer.getModel();
                 matrixStack.pushPose();
-                getHeadRot(partialTick, livingEntity);
-                
+                getHeadRot(event.getPartialTick(), livingEntity);
+                // 不知道为什么没有用
+                // ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
                 double yawRadians = Math.toRadians(-netHeadYaw);
                 double xOffset = 0;
                 double yOffset = 0;
                 double zOffset = 0;
 
-                xOffset -= Math.cos(yawRadians + Math.PI / 2) * CatBurgerConfig.get().client.front_back_offset;
-                zOffset += Math.sin(yawRadians + Math.PI / 2) * CatBurgerConfig.get().client.front_back_offset;
+                xOffset -= Math.cos(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
+                zOffset += Math.sin(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
 
                 yOffset += CatBurgerRenderer.getFloatSpeed(livingEntity);
-                yOffset += CatBurgerConfig.get().client.vertical_offset;
+                yOffset += CatBurgerClientConfig.vertical_offset;
 
                 if (livingEntity.isCrouching()) {
                     yOffset += 1;
@@ -71,12 +73,12 @@ public class YSMCompat {
                     yOffset += 1.5;
                 }
 
-                xOffset += Math.cos(yawRadians) * CatBurgerConfig.get().client.left_right_offset;
-                zOffset -= Math.sin(yawRadians) * CatBurgerConfig.get().client.left_right_offset;
+                xOffset += Math.cos(yawRadians) * CatBurgerClientConfig.left_right_offset;
+                zOffset -= Math.sin(yawRadians) * CatBurgerClientConfig.left_right_offset;
 
                 matrixStack.translate(xOffset, yOffset, zOffset);
 
-                float scale = (float) CatBurgerConfig.get().client.scale;
+                float scale = (float) CatBurgerClientConfig.scale;
                 matrixStack.scale(scale, scale, scale);
                 matrixStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
                 matrixStack.mulPose(Axis.YP.rotationDegrees(-netHeadYaw));
@@ -93,6 +95,6 @@ public class YSMCompat {
                 );
                 matrixStack.popPose();
             }
-        }
+        });
     }
 }

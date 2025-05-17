@@ -1,57 +1,22 @@
 package net.zhaiji.catburger;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import dev.emi.trinkets.api.client.TrinketRendererRegistry;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.zhaiji.catburger.client.compat.YSMCompat;
 import net.zhaiji.catburger.client.render.CatBurgerRenderer;
 import net.zhaiji.catburger.init.InitItem;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
-public class CatBurgerClient implements ClientModInitializer {
-    @Override
-    public void onInitializeClient() {
-        TrinketRendererRegistry.registerRenderer(InitItem.CAT_BURGER, new CatBurgerRenderer());
-
+public class CatBurgerClient {
+    public static void onClient(IEventBus modEventBus,IEventBus forgeEventBus) {
         if (YSMCompat.isLoad()) {
-            registerYSMCompatRenderer();
+            forgeEventBus.addListener(YSMCompat::RenderLivingEvent);
+        } else {
+            modEventBus.addListener(CatBurgerClient::FMLClientSetupEvent);
         }
     }
 
-    private void registerYSMCompatRenderer() {
-        LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
-                (entityType, entityRenderer, registrationHelper, context) -> {
-                    registrationHelper.register(new YSMCompatFeatureRenderer<>(entityRenderer));
-                }
-        );
-    }
-
-    private static class YSMCompatFeatureRenderer<T extends LivingEntity, M extends EntityModel<T>>
-            extends RenderLayer<T, M> {
-
-        public YSMCompatFeatureRenderer(RenderLayerParent<T, M> parent) {
-            super(parent);
-        }
-
-        @Override
-        public void render(
-                PoseStack poseStack,
-                MultiBufferSource multiBufferSource,
-                int light,
-                T livingEntity,
-                float limbAngle,
-                float limbDistance,
-                float tickDelta,
-                float animationProgress,
-                float headYaw,
-                float headPitch) {
-
-            YSMCompat.renderLivingPost(livingEntity, tickDelta, poseStack, multiBufferSource, light);
-        }
+    public static void FMLClientSetupEvent(FMLClientSetupEvent event) {
+        CuriosRendererRegistry.register(InitItem.CAT_BURGER.get(), CatBurgerRenderer::new);
     }
 }

@@ -3,12 +3,10 @@
   "minVersion": "0.8",
   "package": "net.zhaiji.catburger.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "CatBurger-Refabriced-refmap.json",
+  "refmap": "catburger.refmap.json",
   "mixins": [
-    "PlayerSleepMixin"
   ],
   "client": [
-    "LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

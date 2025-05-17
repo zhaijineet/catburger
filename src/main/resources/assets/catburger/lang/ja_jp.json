@@ -1,24 +1,5 @@
 {
   "item.catburger.cat_burger": "猫バーガー",
   "item.catburger.cat_burger.tooltip": "にゃー!",
-  "creativetab.catburger.catburger_tab": "猫バーガー",
-  "trinkets.slot.head.head": "猫",
-
-  "text.autoconfig.catburger.title": "猫バーガー コンフィグ",
-  "text.autoconfig.catburger.option.totem_effect_active": "トーテム効果が有効？",
-  "text.autoconfig.catburger.option.wake_up_can_reset_cooldown": "起床時にトーテム効果のクールダウンをリセットできる？",
-  "text.autoconfig.catburger.option.totem_cooldown": "トーテム効果のクールダウン（ティック）",
-  "text.autoconfig.catburger.option.trinket_cooldown": "装飾品効果のクールダウン（ティック）",
-  "text.autoconfig.catburger.option.food_restoration_form_trinket": "装飾品効果による食料回復",
-  "text.autoconfig.catburger.option.food_max_restoration": "最大食料回復",
-  "text.autoconfig.catburger.option.health_restoration_form_totem": "トーテム効果による体力回復",
-  "text.autoconfig.catburger.option.food_restoration_form_totem": "トーテム効果による食料回復",
-  "text.autoconfig.catburger.option.saturation_restoration_form_totem": "トーテム効果による満腹度回復",
-  "text.autoconfig.catburger.option.client": "クライアント コンフィグ",
-  "text.autoconfig.catburger.option.client.scale": "スケール",
-  "text.autoconfig.catburger.option.client.float_distance": "浮動距離（ブロック）",
-  "text.autoconfig.catburger.option.client.time": "浮動サイクル完了時間（ティック）",
-  "text.autoconfig.catburger.option.client.front_back_offset": "前後オフセット",
-  "text.autoconfig.catburger.option.client.vertical_offset": "垂直オフセット",
-  "text.autoconfig.catburger.option.client.left_right_offset": "左右オフセット"
+  "creativetab.catburger.catburger_tab": "猫バーガー"
 }

@@ -1,11 +1,14 @@
 package net.zhaiji.catburger.network.packet;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkEvent;
 import net.zhaiji.catburger.init.InitItem;
+
+import java.util.function.Supplier;
 
 public class PlayerDeathPacket {
     public void encode(FriendlyByteBuf buf) {
@@ -15,10 +18,15 @@ public class PlayerDeathPacket {
         return new PlayerDeathPacket();
     }
 
-    @Environment(EnvType.CLIENT)
-    public void handle() {
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
+        NetworkEvent.Context context = supplier.get();
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.gameRenderer.displayItemActivation(new ItemStack(InitItem.CAT_BURGER));
-        System.out.println("Kitty you can has cheese burger");
+        context.enqueueWork(() -> {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                minecraft.gameRenderer.displayItemActivation(new ItemStack(InitItem.CAT_BURGER.get()));
+                System.out.println("Kitty you can has cheese burger");
+            });
+        });
+        context.setPacketHandled(true);
     }
 }
