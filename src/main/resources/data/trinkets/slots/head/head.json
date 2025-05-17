@@ -1,0 +1,5 @@
+{
+  "icon": "catburger:gui/slots/catburger_slot",
+  "order": -512,
+  "validator_predicates": [ "catburger:cat_burger", "trinkets:tag" ]
+}
