@@ -14,7 +14,7 @@ import net.zhaiji.catburger.CatBurger;
 public class InitCreativeModeTab {
     public static final ResourceKey<CreativeModeTab> CATBURGER_TAB_KEY = ResourceKey.create(
             Registries.CREATIVE_MODE_TAB,
-            new ResourceLocation(CatBurger.MOD_ID, "catburger_tab")
+            ResourceLocation.fromNamespaceAndPath(CatBurger.MOD_ID, "catburger_tab")
     );
 
     public static final CreativeModeTab CATBURGER_TAB = FabricItemGroup.builder()

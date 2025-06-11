@@ -1,26 +1,37 @@
 package net.zhaiji.catburger.network;
 
+
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
-import net.zhaiji.catburger.CatBurger;
-import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
+import net.minecraft.world.item.ItemStack;
+import net.zhaiji.catburger.init.InitItem;
+import net.zhaiji.catburger.network.packet.PlayerDeathPayload;
 
 public class CatBurgerPacket {
-    public static final ResourceLocation PLAYER_DEATH_PACKET_ID = new ResourceLocation(CatBurger.MOD_ID, "player_death");
 
     public static void registry() {
-        ClientPlayNetworking.registerGlobalReceiver(PLAYER_DEATH_PACKET_ID, (client, handler, buf, responseSender) -> {
-            PlayerDeathPacket packet = PlayerDeathPacket.decode(buf);
-            client.execute(packet::handle);
-        });
+
+        PayloadTypeRegistry.playS2C().register(
+                PlayerDeathPayload.PAYLOAD_TYPE,
+                PlayerDeathPayload.CODEC
+        );
+
+        ClientPlayNetworking.registerGlobalReceiver(
+                PlayerDeathPayload.PAYLOAD_TYPE,
+                (payload, context) -> {
+                    Minecraft client = context.client();
+                    client.execute(() -> {
+                        client.gameRenderer.displayItemActivation(new ItemStack(InitItem.CAT_BURGER));
+                        System.out.println("Kitty you can has cheese burger");
+                    });
+                }
+        );
     }
 
-    public static void sendToClient(PlayerDeathPacket msg, ServerPlayer serverPlayer) {
-        var buf = PacketByteBufs.create();
-        msg.encode(buf);
-        ServerPlayNetworking.send(serverPlayer, PLAYER_DEATH_PACKET_ID, buf);
+    public static void sendToClient(ServerPlayer player) {
+        ServerPlayNetworking.send(player, new PlayerDeathPayload());
     }
 }

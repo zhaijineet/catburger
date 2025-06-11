@@ -14,12 +14,9 @@ import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.zhaiji.catburger.config.CatBurgerConfig;
 import net.zhaiji.catburger.init.InitItem;
 import net.zhaiji.catburger.network.CatBurgerPacket;
-import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -71,9 +68,10 @@ public class CatBurgerItem extends TrinketItem {
         return true;
     }
 
+
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag);
+    public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
         list.add(Component.translatable("item.catburger.cat_burger.tooltip"));
     }
 
@@ -90,7 +88,7 @@ public class CatBurgerItem extends TrinketItem {
                             player.getCooldowns().addCooldown(InitItem.CAT_BURGER, CatBurgerConfig.get().totem_cooldown);
                             player.level().broadcastEntityEvent(player, (byte) 35);
                             if (player instanceof ServerPlayer serverPlayer) {
-                                CatBurgerPacket.sendToClient(new PlayerDeathPacket(), serverPlayer);
+                                CatBurgerPacket.sendToClient(serverPlayer);
                             }
                             return true;
                         }

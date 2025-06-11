@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +20,7 @@ import org.joml.Quaternionf;
 
 public class CatBurgerRenderer implements TrinketRenderer {
     public static BakedModel getModel() {
-        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(CatBurger.MOD_ID, "cat_burger", "inventory"));
+        return Minecraft.getInstance().getModelManager().getModel(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(CatBurger.MOD_ID, "cat_burger"), "inventory"));
     }
 
     public static double getFloatSpeed(LivingEntity livingEntity) {
