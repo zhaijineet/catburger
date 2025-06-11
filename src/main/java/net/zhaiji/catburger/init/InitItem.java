@@ -11,6 +11,6 @@ public class InitItem {
     public static final Item CAT_BURGER = new CatBurgerItem();
 
     public static void register() {
-        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(CatBurger.MOD_ID, "cat_burger"), CAT_BURGER);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(CatBurger.MOD_ID, "cat_burger"), CAT_BURGER);
     }
 }
