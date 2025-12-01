@@ -17,7 +17,7 @@
       "net.zhaiji.catburger.CatBurger"
     ],
     "modmenu": [
-      "net.zhaiji.catburger.compat.modmenu.ModMenuIntegration"
+      "net.zhaiji.catburger.client.compat.ModMenuIntegration"
     ]
   },
   "mixins": [
