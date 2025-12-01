@@ -4,7 +4,10 @@
   "version": "${version}",
   "name": "Catburger",
   "description": "",
-  "authors": [],
+  "authors": [
+    "Flechazo",
+    "zhaiji"
+  ],
   "contact": {},
   "license": "MIT",
   "icon": "logo.png",
@@ -26,7 +29,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "minecraft": "*",
+    "minecraft": "1.21.1",
     "trinkets": "*"
   }
 }
