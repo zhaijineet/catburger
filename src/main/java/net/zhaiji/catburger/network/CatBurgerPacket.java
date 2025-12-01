@@ -11,7 +11,7 @@ import net.zhaiji.catburger.network.packet.PlayerDeathPacket;
 public class CatBurgerPacket {
     public static final ResourceLocation PLAYER_DEATH_PACKET_ID = new ResourceLocation(CatBurger.MOD_ID, "player_death");
 
-    public static void registry() {
+    public static void registerClient() {
         ClientPlayNetworking.registerGlobalReceiver(PLAYER_DEATH_PACKET_ID, (client, handler, buf, responseSender) -> {
             PlayerDeathPacket packet = PlayerDeathPacket.decode(buf);
             client.execute(packet::handle);

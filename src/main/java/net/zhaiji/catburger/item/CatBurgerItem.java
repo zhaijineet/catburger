@@ -100,7 +100,7 @@ public class CatBurgerItem extends TrinketItem {
         return false;
     }
 
-    public static void handlePlayerWakeUp (Player player) {
+    public static void handlePlayerWakeUp(Player player) {
         if (!CatBurgerConfig.get().wake_up_can_reset_cooldown) return;
 
         TrinketsApi.getTrinketComponent(player).ifPresent(component -> {
