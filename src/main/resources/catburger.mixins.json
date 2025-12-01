@@ -8,7 +8,7 @@
     "PlayerSleepMixin"
   ],
   "client": [
-    "LivingEntityRendererMixin"
+    "EntityRenderDispatcherMixin"
   ],
   "injectors": {
     "defaultRequire": 1

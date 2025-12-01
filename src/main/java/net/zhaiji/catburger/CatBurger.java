@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class CatBurger implements ModInitializer {
     public static final String MOD_ID = "catburger";
-    private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
     public void onInitialize() {
@@ -26,7 +26,7 @@ public class CatBurger implements ModInitializer {
 
         InitCreativeModeTab.register();
 
-        CatBurgerPacket.registry();
+        CatBurgerPacket.registerServer();
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> LOGGER.info("CatBurger模组已加载！"));
 

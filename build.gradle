@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.10.5'
+    id 'fabric-loom' version '1.13.6'
     id 'maven-publish'
 }
 
@@ -7,7 +7,7 @@ version = project.mod_version
 group = project.maven_group
 
 base {
-    archivesName = project.archives_base_name
+    archivesName = "${archives_base_name}-fabric-${minecraft_version}"
 }
 
 repositories {
@@ -24,6 +24,18 @@ repositories {
     maven {
         name = "Ladysnake Libs"
         url = 'https://maven.ladysnake.org/releases'
+    }
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+    maven {
+        // Add curse maven to repositories
+        name = "Curse Maven"
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
 }
 
@@ -42,6 +54,17 @@ dependencies {
         modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
     modImplementation "dev.emi:trinkets:${trinkets_version}"
+
+    modImplementation files("libs/ysm-2.5.3-fabric+mc1.21.1-release.jar")
+
+    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.fcap_version}"
+    modImplementation "curse.maven:sodium-394468:6382649"
+    modImplementation "curse.maven:irisshaders-455508:6213635"
+
+    // fuck loom
+    implementation files("libs/antlr4-runtime-4.13.1.jar")
+    implementation files("libs/glsl-transformer-3.0.0-pre3.jar")
+    implementation files("libs/jcpp-1.4.14.jar")
 }
 
 processResources {

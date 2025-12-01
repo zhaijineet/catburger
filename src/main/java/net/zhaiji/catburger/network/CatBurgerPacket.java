@@ -12,12 +12,7 @@ import net.zhaiji.catburger.network.packet.PlayerDeathPayload;
 
 public class CatBurgerPacket {
 
-    public static void registry() {
-
-        PayloadTypeRegistry.playS2C().register(
-                PlayerDeathPayload.PAYLOAD_TYPE,
-                PlayerDeathPayload.CODEC
-        );
+    public static void registerClient() {
 
         ClientPlayNetworking.registerGlobalReceiver(
                 PlayerDeathPayload.PAYLOAD_TYPE,
@@ -28,6 +23,17 @@ public class CatBurgerPacket {
                         System.out.println("Kitty you can has cheese burger");
                     });
                 }
+        );
+    }
+
+    public static void registerServer() {
+        PayloadTypeRegistry.playS2C().register(
+                PlayerDeathPayload.PAYLOAD_TYPE,
+                PlayerDeathPayload.CODEC
+        );
+        PayloadTypeRegistry.playC2S().register(
+                PlayerDeathPayload.PAYLOAD_TYPE,
+                PlayerDeathPayload.CODEC
         );
     }
 
