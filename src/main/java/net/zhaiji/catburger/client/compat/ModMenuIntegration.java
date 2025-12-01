@@ -1,4 +1,4 @@
-package net.zhaiji.catburger.compat.modmenu;
+package net.zhaiji.catburger.client.compat;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
