@@ -57,8 +57,9 @@ public class CatBurgerRenderer implements TrinketRenderer {
         yOffset += CatBurgerRenderer.getFloatSpeed(entity);
         yOffset -= CatBurgerConfig.get().client.vertical_offset;
 
-        if (entity.isCrouching() && !entity.isSwimming() && !entity.isPassenger()) {
-            matrices.translate(0.0F, 0.2F, 0.0F);
+
+        if (entity.isCrouching()) {
+            matrices.translate(0.0F, 0.1875F, 0.0F);
         }
 
         xOffset += Math.cos(yawRadians) * CatBurgerConfig.get().client.left_right_offset;

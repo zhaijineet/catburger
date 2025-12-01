@@ -10,7 +10,6 @@ import net.zhaiji.catburger.config.CatBurgerConfig;
 import net.zhaiji.catburger.init.InitCreativeModeTab;
 import net.zhaiji.catburger.init.InitItem;
 import net.zhaiji.catburger.item.CatBurgerItem;
-import net.zhaiji.catburger.network.CatBurgerPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +24,6 @@ public class CatBurger implements ModInitializer {
         InitItem.register();
 
         InitCreativeModeTab.register();
-
-        CatBurgerPacket.registry();
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> LOGGER.info("CatBurger模组已加载！"));
 
