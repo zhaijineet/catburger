@@ -12,16 +12,15 @@ import net.zhaiji.catburger.CatBurger;
 import java.util.concurrent.CompletableFuture;
 
 @Mod.EventBusSubscriber(modid = CatBurger.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class DataGenerators {
+public class DataGenHandler {
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public static void handlerGatherDataEvent(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         // Recipe
-        generator.addProvider(event.includeServer(), new RecipeProvider(packOutput) {
-        });
+        generator.addProvider(event.includeServer(), new RecipeProvider(packOutput));
     }
 }
