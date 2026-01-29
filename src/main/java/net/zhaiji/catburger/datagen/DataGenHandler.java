@@ -1,4 +1,4 @@
-package net.zhaiji.catburger.data;
+package net.zhaiji.catburger.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -11,9 +11,9 @@ import net.zhaiji.catburger.CatBurger;
 import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid = CatBurger.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-public class DataGenerators {
+public class DataGenHandler {
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public static void handlerGatherDataEvent(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();

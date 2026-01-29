@@ -1,4 +1,4 @@
-package net.zhaiji.catburger.data;
+package net.zhaiji.catburger.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;

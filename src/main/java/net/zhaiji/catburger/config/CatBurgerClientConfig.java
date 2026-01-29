@@ -1,26 +1,28 @@
 package net.zhaiji.catburger.config;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.zhaiji.catburger.CatBurger;
 
-@EventBusSubscriber(modid = CatBurger.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class CatBurgerClientConfig {
     public static double scale;
-    public static double float_distance;
+    public static double floatDistance;
     public static double time;
-    public static double front_back_offset;
-    public static double vertical_offset;
-    public static double left_right_offset;
+    public static double frontBackOffset;
+    public static double verticalOffset;
+    public static double leftRightOffset;
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
-            .comment("CatBurger Client Config")
+            .comment(
+                    "客户端配置",
+                    "client config"
+            )
             .push("Config");
 
     private static final ModConfigSpec.DoubleValue SCALE = BUILDER
-            .comment("scale")
+            .comment(
+                    "模型显示缩放比例",
+                    "Display scale"
+            )
             .defineInRange(
                     "scale",
                     0.7,
@@ -29,16 +31,22 @@ public class CatBurgerClientConfig {
             );
 
     private static final ModConfigSpec.DoubleValue FLOAT_DISTANCE = BUILDER
-            .comment("float distance (blocks)")
+            .comment(
+                    "浮动高度范围(block)",
+                    "Float distance (blocks)"
+            )
             .defineInRange(
-                    "float_distance",
+                    "floatDistance",
                     0.1,
                     0,
                     100d
             );
 
     private static final ModConfigSpec.DoubleValue FLOAT_CYCLE_DURATION = BUILDER
-            .comment("time to complete a float cycle (tick) ")
+            .comment(
+                    "完成一次上下浮动循环所需时间(tick)",
+                    "Time to complete a float cycle (tick)"
+            )
             .defineInRange(
                     "time",
                     40,
@@ -47,27 +55,36 @@ public class CatBurgerClientConfig {
             );
 
     private static final ModConfigSpec.DoubleValue FRONT_BACK_OFFSET = BUILDER
-            .comment("front & back offset")
+            .comment(
+                    "前后位置偏移",
+                    "Front & back offset"
+            )
             .defineInRange(
-                    "front_back_offset",
+                    "frontBackOffset",
                     0,
                     -100d,
                     100d
             );
 
     private static final ModConfigSpec.DoubleValue VERTICAL_OFFSET = BUILDER
-            .comment("vertical offset")
+            .comment(
+                    "垂直高度偏移",
+                    "Vertical offset"
+            )
             .defineInRange(
-                    "vertical_offset",
+                    "verticalOffset",
                     0,
                     -100d,
                     100d
             );
 
     private static final ModConfigSpec.DoubleValue LEFT_RIGHT_OFFSET = BUILDER
-            .comment("left & right offset")
+            .comment(
+                    "左右位置偏移",
+                    "Left & right offset"
+            )
             .defineInRange(
-                    "left_right_offset",
+                    "leftRightOffset",
                     -0.8,
                     -100d,
                     100d
@@ -75,15 +92,14 @@ public class CatBurgerClientConfig {
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
-    @SubscribeEvent
-    static void onLoad(final ModConfigEvent event) {
+    public static void handlerModConfigEvent(ModConfigEvent event) {
         if (event.getConfig().getSpec() == SPEC) {
             scale = SCALE.get();
-            float_distance = FLOAT_DISTANCE.get();
+            floatDistance = FLOAT_DISTANCE.get();
             time = FLOAT_CYCLE_DURATION.get();
-            front_back_offset = FRONT_BACK_OFFSET.get();
-            vertical_offset = VERTICAL_OFFSET.get();
-            left_right_offset = LEFT_RIGHT_OFFSET.get();
+            frontBackOffset = FRONT_BACK_OFFSET.get();
+            verticalOffset = VERTICAL_OFFSET.get();
+            leftRightOffset = LEFT_RIGHT_OFFSET.get();
         }
     }
 }

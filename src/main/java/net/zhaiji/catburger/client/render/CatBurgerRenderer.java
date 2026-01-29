@@ -23,12 +23,12 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 @OnlyIn(Dist.CLIENT)
 public class CatBurgerRenderer implements ICurioRenderer {
-    public static BakedModel getModel(){
+    public static BakedModel getModel() {
         return Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(ResourceLocation.fromNamespaceAndPath(CatBurger.MOD_ID, "cat_burger")));
     }
 
-    public static double getFloatSpeed(LivingEntity livingEntity) {
-        return CatBurgerClientConfig.float_distance / 2 * Math.sin(livingEntity.tickCount * Math.PI / CatBurgerClientConfig.time * 2);
+    public static double getFloatSpeed(LivingEntity livingEntity, float partialTicks) {
+        return CatBurgerClientConfig.floatDistance / 2 * Math.sin((livingEntity.tickCount + partialTicks) * Math.PI * 2 / CatBurgerClientConfig.time);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CatBurgerRenderer implements ICurioRenderer {
             float netHeadYaw,
             float headPitch
     ) {
-        LivingEntity livingEntity = slotContext.entity();
+        LivingEntity entity = slotContext.entity();
         Minecraft minecraft = Minecraft.getInstance();
         BakedModel model = getModel();
         matrixStack.pushPose();
@@ -55,15 +55,15 @@ public class CatBurgerRenderer implements ICurioRenderer {
         double yOffset = 0;
         double zOffset = 0;
 
-        xOffset += Math.cos(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
-        zOffset -= Math.sin(yawRadians + Math.PI / 2) * CatBurgerClientConfig.front_back_offset;
+        xOffset += Math.cos(yawRadians + Math.PI / 2) * CatBurgerClientConfig.frontBackOffset;
+        zOffset -= Math.sin(yawRadians + Math.PI / 2) * CatBurgerClientConfig.frontBackOffset;
 
-        yOffset += CatBurgerRenderer.getFloatSpeed(livingEntity);
-        yOffset -= CatBurgerClientConfig.vertical_offset;
-        ICurioRenderer.translateIfSneaking(matrixStack, livingEntity);
+        yOffset += CatBurgerRenderer.getFloatSpeed(entity, partialTicks);
+        yOffset -= CatBurgerClientConfig.verticalOffset;
+        ICurioRenderer.translateIfSneaking(matrixStack, entity);
 
-        xOffset += Math.cos(yawRadians) * CatBurgerClientConfig.left_right_offset;
-        zOffset -= Math.sin(yawRadians) * CatBurgerClientConfig.left_right_offset;
+        xOffset += Math.cos(yawRadians) * CatBurgerClientConfig.leftRightOffset;
+        zOffset -= Math.sin(yawRadians) * CatBurgerClientConfig.leftRightOffset;
 
         matrixStack.translate(xOffset, yOffset, zOffset);
 
