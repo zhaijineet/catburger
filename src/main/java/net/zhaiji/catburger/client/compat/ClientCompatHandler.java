@@ -12,37 +12,25 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.fml.loading.LoadingModList;
 import net.zhaiji.catburger.client.render.CatBurgerRenderer;
+import net.zhaiji.catburger.compat.CompatManager;
+import net.zhaiji.catburger.compat.TLMCompat;
 import net.zhaiji.catburger.config.CatBurgerClientConfig;
 import net.zhaiji.catburger.init.InitItem;
 import org.joml.Quaternionf;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.List;
+import java.util.Optional;
 
-public class CompatManager {
-    public static boolean YSMLoad = false;
-    public static boolean TLMLoad = false;
-
-    public static boolean isYSMLoad() {
-        YSMLoad = LoadingModList.get().getModFileById("yes_steve_model") != null;
-        return YSMLoad;
-    }
-
-    public static boolean isTLMLoad() {
-        TLMLoad = LoadingModList.get().getModFileById("touhou_little_maid") != null;
-        return TLMLoad;
-    }
-
+public class ClientCompatHandler {
     public static void handlerRenderLivingEvent$Post(RenderLivingEvent.Post event) {
         LivingEntity entity = event.getEntity();
-        if (!YSMLoad && !(TLMLoad && TLMCompat.canRender(entity))) return;
+        if (!CompatManager.YSMLoad && !(CompatManager.TLMLoad && TLMCompat.canRender(entity))) return;
         Item item = InitItem.CAT_BURGER.get();
         CuriosApi.getCuriosInventory(entity).ifPresent(iCuriosItemHandler -> {
-            List<SlotResult> slotResults = iCuriosItemHandler.findCurios(item);
-            if (!slotResults.isEmpty() && slotResults.get(0).slotContext().visible()) {
+            Optional<SlotResult> slotResult = iCuriosItemHandler.findFirstCurio(item);
+            if (slotResult.isPresent() && slotResult.get().slotContext().visible()) {
                 PoseStack matrixStack = event.getPoseStack();
                 float partialTicks = event.getPartialTick();
                 float netHeadYaw = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);

@@ -1,7 +1,8 @@
 package net.zhaiji.catburger.client.event;
 
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.zhaiji.catburger.client.compat.CompatManager;
+import net.zhaiji.catburger.client.compat.ClientCompatHandler;
+import net.zhaiji.catburger.compat.CompatManager;
 import net.zhaiji.catburger.config.CatBurgerClientConfig;
 
 public class ClientEventManager {
@@ -19,7 +20,7 @@ public class ClientEventManager {
 
     public static void gameBusListener(IEventBus gameBus) {
         if (CompatManager.isYSMLoad() || CompatManager.isTLMLoad()) {
-            gameBus.addListener(CompatManager::handlerRenderLivingEvent$Post);
+            gameBus.addListener(ClientCompatHandler::handlerRenderLivingEvent$Post);
         }
     }
 }
