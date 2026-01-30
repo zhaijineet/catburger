@@ -10,9 +10,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.zhaiji.catburger.client.render.CatBurgerRenderer;
+import net.zhaiji.catburger.compat.CompatManager;
+import net.zhaiji.catburger.compat.TLMCompat;
 import net.zhaiji.catburger.config.CatBurgerClientConfig;
 import net.zhaiji.catburger.init.InitItem;
 import org.joml.Quaternionf;
@@ -21,23 +22,10 @@ import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Optional;
 
-public class CompatManager {
-    public static boolean YSMLoad = false;
-    public static boolean TLMLoad = false;
-
-    public static boolean isYSMLoad() {
-        YSMLoad = ModList.get().isLoaded("yes_steve_model");
-        return YSMLoad;
-    }
-
-    public static boolean isTLMLoad() {
-        TLMLoad = ModList.get().isLoaded("touhou_little_maid");
-        return TLMLoad;
-    }
-
+public class ClientCompatHandler {
     public static void handlerRenderLivingEvent$Post(RenderLivingEvent.Post event) {
         LivingEntity entity = event.getEntity();
-        if (!YSMLoad && !(TLMLoad && TLMCompat.canRender(entity))) return;
+        if (!CompatManager.YSMLoad && !(CompatManager.TLMLoad && TLMCompat.canRender(entity))) return;
         Item item = InitItem.CAT_BURGER.get();
         CuriosApi.getCuriosInventory(entity).ifPresent(iCuriosItemHandler -> {
             Optional<SlotResult> slotResult = iCuriosItemHandler.findFirstCurio(item);

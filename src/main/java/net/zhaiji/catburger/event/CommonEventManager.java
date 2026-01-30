@@ -1,8 +1,8 @@
 package net.zhaiji.catburger.event;
 
 import net.neoforged.bus.api.IEventBus;
-import net.zhaiji.catburger.client.compat.TLMCompat;
-import net.zhaiji.catburger.client.compat.CompatManager;
+import net.zhaiji.catburger.compat.CompatManager;
+import net.zhaiji.catburger.compat.TLMCompat;
 import net.zhaiji.catburger.config.CatBurgerCommonConfig;
 import net.zhaiji.catburger.network.PacketManager;
 
