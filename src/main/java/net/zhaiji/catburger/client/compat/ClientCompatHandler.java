@@ -10,8 +10,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.zhaiji.catburger.client.render.CatBurgerRenderData;
 import net.zhaiji.catburger.client.render.CatBurgerRenderer;
 import net.zhaiji.catburger.compat.CompatManager;
 import net.zhaiji.catburger.compat.TLMCompat;
@@ -31,46 +31,146 @@ public class ClientCompatHandler {
         CuriosApi.getCuriosInventory(entity).ifPresent(iCuriosItemHandler -> {
             Optional<SlotResult> slotResult = iCuriosItemHandler.findFirstCurio(item);
             if (slotResult.isPresent() && slotResult.get().slotContext().visible()) {
+                // 第一部分：基础数据准备
                 PoseStack matrixStack = event.getPoseStack();
                 float partialTicks = event.getPartialTick();
-                float netHeadYaw = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
-                float headPitch = Mth.lerp(partialTicks, entity.xRotO, entity.getXRot());
-                netHeadYaw = Mth.wrapDegrees(netHeadYaw);
+                float viewYRot = entity.getViewYRot(partialTicks);
+                float headPitch = entity.getViewXRot(partialTicks);
                 MultiBufferSource renderTypeBuffer = event.getMultiBufferSource();
                 int light = event.getPackedLight();
                 Minecraft minecraft = Minecraft.getInstance();
                 BakedModel model = CatBurgerRenderer.getModel();
-                matrixStack.pushPose();
-                double yawRadians = Math.toRadians(-netHeadYaw);
 
-                double xOffset = 0;
-                double yOffset = 0;
-                double zOffset = 0;
+                // 获取或创建渲染数据
+                CatBurgerRenderData data = CatBurgerRenderData.RENDER_DATA_MAP.computeIfAbsent(
+                        entity,
+                        e -> new CatBurgerRenderData(viewYRot, entity)
+                );
 
-                xOffset -= Math.cos(yawRadians + Math.PI / 2) * CatBurgerClientConfig.frontBackOffset;
-                zOffset += Math.sin(yawRadians + Math.PI / 2) * CatBurgerClientConfig.frontBackOffset;
+                // 第二部分：物理系统更新（每tick执行一次）
+                int currentTick = entity.tickCount;
+                double entityX = entity.getX();
+                double entityY = entity.getY();
+                double entityZ = entity.getZ();
 
-                yOffset += CatBurgerRenderer.getFloatSpeed(entity, partialTicks);
-                yOffset += CatBurgerClientConfig.verticalOffset;
+                if (currentTick != data.lastTick) {
+                    // 断点检测与重置
+                    if (currentTick - data.lastTick > 5) {
+                        data.dragX = entityX;
+                        data.dragY = entityY;
+                        data.dragZ = entityZ;
+                        data.dragYaw = viewYRot;
+                        data.springYaw = viewYRot;
+                        data.velocity = 0;
+                        // 重置蹲姿高度偏移
+                        data.dragCrouchOffset = entity.isCrouching() ? -0.5 : 0;
+                    }
 
-                if (entity.isCrouching()) {
-                    yOffset += 1;
-                } else {
-                    yOffset += 1.5;
+                    // 位置拖拽系统更新
+                    data.prevDragX = data.dragX;
+                    data.prevDragY = data.dragY;
+                    data.prevDragZ = data.dragZ;
+                    data.prevDragCrouchOffset = data.dragCrouchOffset;
+
+                    double targetCrouchOffset = entity.isCrouching() ? -0.5 : 0;
+
+                    if (CatBurgerClientConfig.dragEnabled) {
+                        data.dragX += (entityX - data.dragX) * CatBurgerClientConfig.dragStrength;
+                        data.dragY += (entityY - data.dragY) * CatBurgerClientConfig.dragStrength;
+                        data.dragZ += (entityZ - data.dragZ) * CatBurgerClientConfig.dragStrength;
+                        data.dragCrouchOffset += (targetCrouchOffset - data.dragCrouchOffset) * CatBurgerClientConfig.dragStrength;
+                    } else {
+                        data.dragX = entityX;
+                        data.dragY = entityY;
+                        data.dragZ = entityZ;
+                        data.dragCrouchOffset = targetCrouchOffset;
+                    }
+
+                    // 旋转拖拽系统更新
+                    data.prevDragYaw = data.dragYaw;
+
+                    if (CatBurgerClientConfig.rotationDragEnabled) {
+                        float angleDiff = CatBurgerClientConfig.rotationDragUseWrapDegrees
+                                ? Mth.wrapDegrees(viewYRot - data.dragYaw)
+                                : viewYRot - data.dragYaw;
+                        data.dragYaw += angleDiff * (float) CatBurgerClientConfig.rotationDragSmoothness;
+                    } else {
+                        data.dragYaw = viewYRot;
+                    }
+
+                    // 弹簧物理系统更新
+                    data.prevSpringYaw = data.springYaw;
+
+                    if (CatBurgerClientConfig.springEnabled) {
+                        float displacement = viewYRot - data.springYaw;
+                        float springForce = (float) CatBurgerClientConfig.springStiffness * displacement;
+                        data.velocity = data.velocity * (float) CatBurgerClientConfig.springDamping + springForce;
+                        data.springYaw += data.velocity;
+                    } else {
+                        data.springYaw = viewYRot;
+                        data.velocity = 0;
+                    }
+
+                    data.lastTick = currentTick;
                 }
 
-                xOffset += Math.cos(yawRadians) * CatBurgerClientConfig.leftRightOffset;
-                zOffset -= Math.sin(yawRadians) * CatBurgerClientConfig.leftRightOffset;
+                // 第三部分：计算使用的角度（优先级：弹簧 > 旋转拖拽 > 原始）
+                float usedYaw;
+                if (CatBurgerClientConfig.springEnabled) {
+                    usedYaw = Mth.lerp(partialTicks, data.prevSpringYaw, data.springYaw);
+                } else if (CatBurgerClientConfig.rotationDragEnabled) {
+                    usedYaw = Mth.lerp(partialTicks, data.prevDragYaw, data.dragYaw);
+                } else {
+                    usedYaw = viewYRot;
+                }
+
+                // 第四部分：位置偏移计算
+                double yawRadians = Math.toRadians(-usedYaw);
+
+                // 实体插值位置
+                double entityLerpX = Mth.lerp(partialTicks, entity.xo, entityX);
+                double entityLerpY = Mth.lerp(partialTicks, entity.yo, entityY);
+                double entityLerpZ = Mth.lerp(partialTicks, entity.zo, entityZ);
+
+                // 拖拽偏移量（直接使用世界坐标偏移）
+                double dragOffsetX = Mth.lerp(partialTicks, data.prevDragX, data.dragX) - entityLerpX;
+                double dragOffsetY = Mth.lerp(partialTicks, data.prevDragY, data.dragY) - entityLerpY;
+                double dragOffsetZ = Mth.lerp(partialTicks, data.prevDragZ, data.dragZ) - entityLerpZ;
+
+                // 蹲姿高度偏移插值
+                double crouchOffset = Mth.lerp(partialTicks, data.prevDragCrouchOffset, data.dragCrouchOffset);
+
+                // 最终偏移量合成（保持原有的负号模式）
+                double xOffset =
+                        Math.cos(yawRadians - Mth.HALF_PI) * CatBurgerClientConfig.frontBackOffset
+                        - Math.cos(yawRadians) * CatBurgerClientConfig.leftRightOffset
+                        + dragOffsetX;
+
+                double yOffset =
+                        1.5 // 额外补偿高度
+                        + CatBurgerRenderer.getFloatSpeed(entity, partialTicks)
+                        + CatBurgerClientConfig.verticalOffset
+                        + dragOffsetY
+                        + crouchOffset;  // 添加拖拽的蹲姿偏移
+
+                double zOffset =
+                        -Math.sin(yawRadians - Mth.HALF_PI) * CatBurgerClientConfig.frontBackOffset
+                        + Math.sin(yawRadians) * CatBurgerClientConfig.leftRightOffset
+                        + dragOffsetZ;
+
+                // 第五部分：执行渲染
+                matrixStack.pushPose();
 
                 matrixStack.translate(xOffset, yOffset, zOffset);
 
                 float scale = (float) CatBurgerClientConfig.scale;
                 matrixStack.scale(scale, scale, scale);
                 matrixStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
-                matrixStack.mulPose(Axis.YP.rotationDegrees(-netHeadYaw));
+                matrixStack.mulPose(Axis.YP.rotationDegrees(-viewYRot));
                 matrixStack.mulPose(Axis.XP.rotationDegrees(-headPitch));
+
                 minecraft.getItemRenderer().render(
-                        new ItemStack(item),
+                        item.getDefaultInstance(),
                         ItemDisplayContext.HEAD,
                         false,
                         matrixStack,

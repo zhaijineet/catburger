@@ -22,30 +22,21 @@ public class CatBurgerCommonConfig {
             .push("Config");
 
     private static final ForgeConfigSpec.BooleanValue TOTEM_EFFECT_ACTIVE = BUILDER
-            .comment(
-                    "是否启用猫猫汉堡图腾效果",
-                    "Enable CatBurger totem effect"
-            )
+            .comment("Enable CatBurger totem effect")
             .define(
                     "active",
                     true
             );
 
     private static final ForgeConfigSpec.BooleanValue WAKE_UP_CAN_RESET_COOLDOWN = BUILDER
-            .comment(
-                    "从床上醒来后是否重置图腾冷却时间",
-                    "Reset totem cooldown when waking up from bed"
-            )
+            .comment("Reset totem cooldown when waking up from bed")
             .define(
                     "wakeUpCanResetCooldown",
                     true
             );
 
     private static final ForgeConfigSpec.IntValue TOTEM_COOLDOWN_VALUE = BUILDER
-            .comment(
-                    "图腾效果冷却时间",
-                    "Totem effect cooldown in ticks"
-            )
+            .comment("Totem effect cooldown in ticks")
             .defineInRange(
                     "totemCooldown",
                     36000,
@@ -54,10 +45,7 @@ public class CatBurgerCommonConfig {
             );
 
     private static final ForgeConfigSpec.IntValue CURIOS_COOLDOWN_VALUE = BUILDER
-            .comment(
-                    "饰品效果冷却时间",
-                    "Curios effect cooldown in ticks"
-            )
+            .comment("Curios effect cooldown in ticks")
             .defineInRange(
                     "curiosCooldown",
                     1200,
@@ -66,10 +54,7 @@ public class CatBurgerCommonConfig {
             );
 
     private static final ForgeConfigSpec.IntValue FOOD_RESTORATION_VALUE = BUILDER
-            .comment(
-                    "饰品效果恢复的饥饿值",
-                    "Hunger value restored by Curios effect"
-            )
+            .comment("Hunger value restored by Curios effect")
             .defineInRange(
                     "foodRestorationFromCurios",
                     1,
@@ -78,10 +63,7 @@ public class CatBurgerCommonConfig {
             );
 
     private static final ForgeConfigSpec.IntValue FOOD_MAX_RESTORATION = BUILDER
-            .comment(
-                    "饰品效果可恢复的最大饥饿值上限",
-                    "Maximum hunger value that can be restored by Curios"
-            )
+            .comment("Maximum hunger value that can be restored by Curios")
             .defineInRange(
                     "foodMaxRestoration",
                     18,
@@ -90,10 +72,7 @@ public class CatBurgerCommonConfig {
             );
 
     private static final ForgeConfigSpec.IntValue HEALTH_VALUE = BUILDER
-            .comment(
-                    "图腾触发时恢复的生命值",
-                    "Health points restored when totem triggers"
-            )
+            .comment("Health points restored when totem triggers")
             .defineInRange(
                     "healthRestorationFromTotem",
                     20,
@@ -102,10 +81,7 @@ public class CatBurgerCommonConfig {
             );
 
     private static final ForgeConfigSpec.IntValue FOOD_VALUE = BUILDER
-            .comment(
-                    "图腾触发时恢复的饥饿值",
-                    "Hunger value restored when totem triggers"
-            )
+            .comment("Hunger value restored when totem triggers")
             .defineInRange(
                     "foodRestorationFromTotem",
                     20,
@@ -114,10 +90,7 @@ public class CatBurgerCommonConfig {
             );
 
     private static final ForgeConfigSpec.IntValue SATURATION_VALUE = BUILDER
-            .comment(
-                    "图腾触发时恢复的饱和度",
-                    "Saturation restored when totem triggers"
-            )
+            .comment("Saturation restored when totem triggers")
             .defineInRange(
                     "saturationRestorationFromTotem",
                     20,
