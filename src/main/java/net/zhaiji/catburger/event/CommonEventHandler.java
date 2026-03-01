@@ -21,7 +21,13 @@ public class CommonEventHandler {
             CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
                 if (iCuriosItemHandler.findFirstCurio(item).isPresent()) {
                     FoodData foodData = player.getFoodData();
-                    player.setHealth(CatBurgerCommonConfig.healthRestorationFromTotem);
+                    if (CatBurgerCommonConfig.usePercentageHealthRestoration) {
+                        float maxHealth = player.getMaxHealth();
+                        float restoreAmount = maxHealth * ((float) CatBurgerCommonConfig.percentageHealthRestoration / 100.0f);
+                        player.setHealth(restoreAmount);
+                    } else {
+                        player.setHealth(CatBurgerCommonConfig.healthRestorationFromTotem);
+                    }
                     foodData.setFoodLevel(CatBurgerCommonConfig.foodRestorationFromTotem);
                     foodData.setSaturation(CatBurgerCommonConfig.saturationRestorationFromTotem);
                     player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), CatBurgerCommonConfig.totemCooldown);

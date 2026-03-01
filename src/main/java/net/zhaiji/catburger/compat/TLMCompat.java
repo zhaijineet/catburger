@@ -34,7 +34,13 @@ public class TLMCompat {
         ItemCooldowns cooldowns = maid.getCooldowns();
         CuriosApi.getCuriosInventory(maid).ifPresent(iCuriosItemHandler -> {
             if (iCuriosItemHandler.findFirstCurio(item).isPresent() && !cooldowns.isOnCooldown(item)) {
-                maid.setHealth(CatBurgerCommonConfig.healthRestorationFromTotem);
+                if (CatBurgerCommonConfig.usePercentageHealthRestoration) {
+                    float maxHealth = maid.getMaxHealth();
+                    float restoreAmount = maxHealth * ((float) CatBurgerCommonConfig.percentageHealthRestoration / 100.0f);
+                    maid.setHealth(restoreAmount);
+                } else {
+                    maid.setHealth(CatBurgerCommonConfig.healthRestorationFromTotem);
+                }
                 cooldowns.addCooldown(item, CatBurgerCommonConfig.totemCooldown);
                 maid.level().broadcastEntityEvent(maid, (byte) 35);
                 event.setCanceled(true);
