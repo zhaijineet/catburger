@@ -37,9 +37,9 @@ public class TLMCompat {
                 if (CatBurgerCommonConfig.usePercentageHealthRestoration) {
                     float maxHealth = maid.getMaxHealth();
                     float restoreAmount = maxHealth * ((float) CatBurgerCommonConfig.percentageHealthRestoration / 100.0f);
-                    maid.setHealth(restoreAmount);
+                    maid.heal(restoreAmount);
                 } else {
-                    maid.setHealth(CatBurgerCommonConfig.healthRestorationFromTotem);
+                    maid.heal(CatBurgerCommonConfig.healthRestorationFromTotem);
                 }
                 cooldowns.addCooldown(item, CatBurgerCommonConfig.totemCooldown);
                 maid.level().broadcastEntityEvent(maid, (byte) 35);
