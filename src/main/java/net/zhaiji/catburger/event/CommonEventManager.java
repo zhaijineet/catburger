@@ -1,5 +1,6 @@
 package net.zhaiji.catburger.event;
 
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.zhaiji.catburger.compat.CompatManager;
 import net.zhaiji.catburger.compat.TLMCompat;
@@ -19,7 +20,7 @@ public class CommonEventManager {
     }
 
     public static void gameBusListener(IEventBus gameBus) {
-        gameBus.addListener(CommonEventHandler::handlerLivingDeathEvent);
+        gameBus.addListener(EventPriority.HIGHEST, CommonEventHandler::handlerLivingDeathEvent);
         gameBus.addListener(CommonEventHandler::handlerPlayerWakeUpEvent);
     }
 }

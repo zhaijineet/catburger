@@ -24,9 +24,9 @@ public class CommonEventHandler {
                     if (CatBurgerCommonConfig.usePercentageHealthRestoration) {
                         float maxHealth = player.getMaxHealth();
                         float restoreAmount = maxHealth * ((float) CatBurgerCommonConfig.percentageHealthRestoration / 100.0f);
-                        player.setHealth(restoreAmount);
+                        player.heal(restoreAmount);
                     } else {
-                        player.setHealth(CatBurgerCommonConfig.healthRestorationFromTotem);
+                        player.heal(CatBurgerCommonConfig.healthRestorationFromTotem);
                     }
                     foodData.setFoodLevel(CatBurgerCommonConfig.foodRestorationFromTotem);
                     foodData.setSaturation(CatBurgerCommonConfig.saturationRestorationFromTotem);
