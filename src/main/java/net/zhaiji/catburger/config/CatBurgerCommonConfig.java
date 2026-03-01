@@ -10,6 +10,8 @@ public class CatBurgerCommonConfig {
     public static int curiosCooldown;
     public static int foodRestorationFromCurios;
     public static int foodMaxRestoration;
+    public static boolean usePercentageHealthRestoration;
+    public static double percentageHealthRestoration;
     public static int healthRestorationFromTotem;
     public static int foodRestorationFromTotem;
     public static int saturationRestorationFromTotem;
@@ -68,6 +70,22 @@ public class CatBurgerCommonConfig {
                     20
             );
 
+    private static final ModConfigSpec.BooleanValue USE_PERCENTAGE_HEALTH_RESTORATION = BUILDER
+            .comment("Use percentage-based health restoration (mutually exclusive with fixed value mode)")
+            .define(
+                    "usePercentageHealthRestoration",
+                    true
+            );
+
+    private static final ModConfigSpec.DoubleValue PERCENTAGE_HEALTH_RESTORATION = BUILDER
+            .comment("Health restoration percentage based on max health (only effective when percentage mode is enabled)")
+            .defineInRange(
+                    "percentageHealthRestoration",
+                    100.0,
+                    0.0,
+                    100.0
+            );
+
     private static final ModConfigSpec.IntValue HEALTH_VALUE = BUILDER
             .comment("Health points restored when totem triggers")
             .defineInRange(
@@ -105,6 +123,8 @@ public class CatBurgerCommonConfig {
             curiosCooldown = CURIOS_COOLDOWN_VALUE.get();
             foodRestorationFromCurios = FOOD_RESTORATION_VALUE.get();
             foodMaxRestoration = FOOD_MAX_RESTORATION.get();
+            usePercentageHealthRestoration = USE_PERCENTAGE_HEALTH_RESTORATION.get();
+            percentageHealthRestoration = PERCENTAGE_HEALTH_RESTORATION.get();
             healthRestorationFromTotem = HEALTH_VALUE.get();
             foodRestorationFromTotem = FOOD_VALUE.get();
             saturationRestorationFromTotem = SATURATION_VALUE.get();
