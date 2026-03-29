@@ -1,9 +1,11 @@
 package net.zhaiji.catburger.event;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -16,7 +18,9 @@ public class CommonEventHandler {
     public static void handlerLivingDeathEvent(LivingDeathEvent event) {
         if (!CatBurgerCommonConfig.totemEffectActive) return;
         Item item = InitItem.CAT_BURGER.get();
-        if (event.getEntity() instanceof Player player && !player.getCooldowns().isOnCooldown(item)) {
+        ItemStack cooldownStack = item.getDefaultInstance();
+
+        if (event.getEntity() instanceof Player player && !player.getCooldowns().isOnCooldown(cooldownStack)) {
             CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
                 if (iCuriosItemHandler.findFirstCurio(item).isPresent()) {
                     FoodData foodData = player.getFoodData();
@@ -29,7 +33,7 @@ public class CommonEventHandler {
                     }
                     foodData.setFoodLevel(CatBurgerCommonConfig.foodRestorationFromTotem);
                     foodData.setSaturation(CatBurgerCommonConfig.saturationRestorationFromTotem);
-                    player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), CatBurgerCommonConfig.totemCooldown);
+                    player.getCooldowns().addCooldown(cooldownStack, CatBurgerCommonConfig.totemCooldown);
                     player.level().broadcastEntityEvent(player, (byte) 35);
                     PacketDistributor.sendToPlayer((ServerPlayer) player, new PlayerDeathPacket());
                     event.setCanceled(true);
@@ -42,9 +46,11 @@ public class CommonEventHandler {
         if (!CatBurgerCommonConfig.wakeUpCanResetCooldown) return;
         Player player = event.getEntity();
         Item item = InitItem.CAT_BURGER.get();
+        ItemStack cooldownStack = item.getDefaultInstance();
+        Identifier cooldownId = player.getCooldowns().getCooldownGroup(cooldownStack);
         CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
             if (iCuriosItemHandler.findFirstCurio(item).isPresent()) {
-                player.getCooldowns().removeCooldown(item);
+                player.getCooldowns().removeCooldown(cooldownId);
             }
         });
     }
