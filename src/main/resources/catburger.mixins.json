@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.zhaiji.catburger.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_21",
   "refmap": "catburger.refmap.json",
   "mixins": [
     "MaidClearSleepTaskMixin"

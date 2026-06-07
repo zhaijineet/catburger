@@ -31,6 +31,7 @@ public class CatBurgerRenderData {
     public double prevDragCrouchOffset;  // 上一tick的蹲姿偏移
 
     public CatBurgerRenderData(float yaw, LivingEntity entity) {
+        lastTick = entity.tickCount;
         // 初始化拖拽位置系统
         dragX = prevDragX = entity.getX();
         dragY = prevDragY = entity.getY();

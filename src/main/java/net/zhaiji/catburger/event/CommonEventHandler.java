@@ -29,7 +29,7 @@ public class CommonEventHandler {
                     }
                     foodData.setFoodLevel(CatBurgerCommonConfig.foodRestorationFromTotem);
                     foodData.setSaturation(CatBurgerCommonConfig.saturationRestorationFromTotem);
-                    player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), CatBurgerCommonConfig.totemCooldown);
+                    player.getCooldowns().addCooldown(item, CatBurgerCommonConfig.totemCooldown);
                     player.level().broadcastEntityEvent(player, (byte) 35);
                     PacketDistributor.sendToPlayer((ServerPlayer) player, new PlayerDeathPacket());
                     event.setCanceled(true);

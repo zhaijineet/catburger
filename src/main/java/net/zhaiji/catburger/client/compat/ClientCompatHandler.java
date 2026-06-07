@@ -11,8 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
-import net.zhaiji.catburger.client.render.CatBurgerRenderer;
 import net.zhaiji.catburger.client.render.CatBurgerRenderData;
+import net.zhaiji.catburger.client.render.CatBurgerRenderer;
 import net.zhaiji.catburger.compat.CompatManager;
 import net.zhaiji.catburger.compat.TLMCompat;
 import net.zhaiji.catburger.config.CatBurgerClientConfig;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class ClientCompatHandler {
     public static void handlerRenderLivingEvent$Post(RenderLivingEvent.Post event) {
         LivingEntity entity = event.getEntity();
-        if (!CompatManager.YSMLoad && !(CompatManager.TLMLoad && TLMCompat.canRender(entity))) return;
+        if (!CompatManager.isYSMLoad() && !(CompatManager.isTLMLoad() && TLMCompat.canRender(entity))) return;
         Item item = InitItem.CAT_BURGER.get();
         CuriosApi.getCuriosInventory(entity).ifPresent(iCuriosItemHandler -> {
             Optional<SlotResult> slotResult = iCuriosItemHandler.findFirstCurio(item);
@@ -158,6 +158,19 @@ public class ClientCompatHandler {
                         + Math.sin(yawRadians) * CatBurgerClientConfig.leftRightOffset
                         + dragOffsetZ;
 
+                // 3.2 模型渲染使用的角度（受朝向开关控制）
+                float renderYaw;
+                if (
+                        CatBurgerClientConfig.springEnabled
+                        || CatBurgerClientConfig.rotationDragEnabled && CatBurgerClientConfig.rotationDragAffectOrientation
+                ) {
+                    // 弹簧系统或朝向影响：使用拖拽旋转
+                    renderYaw = usedYaw;
+                } else {
+                    // 禁用朝向影响：使用原始视角旋转（立即跟随）
+                    renderYaw = viewYRot;
+                }
+
                 // 第五部分：执行渲染
                 matrixStack.pushPose();
 
@@ -166,7 +179,7 @@ public class ClientCompatHandler {
                 float scale = (float) CatBurgerClientConfig.scale;
                 matrixStack.scale(scale, scale, scale);
                 matrixStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
-                matrixStack.mulPose(Axis.YP.rotationDegrees(-viewYRot));
+                matrixStack.mulPose(Axis.YP.rotationDegrees(-renderYaw));
                 matrixStack.mulPose(Axis.XP.rotationDegrees(-headPitch));
 
                 minecraft.getItemRenderer().render(

@@ -5,6 +5,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.zhaiji.catburger.compat.CompatManager;
 import net.zhaiji.catburger.compat.TLMCompat;
 import net.zhaiji.catburger.config.CatBurgerCommonConfig;
+import net.zhaiji.catburger.datagen.DataGenHandler;
 import net.zhaiji.catburger.network.PacketManager;
 
 public class CommonEventManager {
@@ -18,6 +19,7 @@ public class CommonEventManager {
 
     public static void modBusListener(IEventBus modBus) {
         modBus.addListener(CatBurgerCommonConfig::handlerModConfigEvent);
+        modBus.addListener(DataGenHandler::handlerGatherDataEvent);
         modBus.addListener(PacketManager::handlerRegisterPayloadHandlersEvent);
     }
 
