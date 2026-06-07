@@ -24,7 +24,7 @@ public class PacketManager {
         INSTANCE.messageBuilder(PlayerDeathPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(PlayerDeathPacket::encode)
                 .decoder(PlayerDeathPacket::decode)
-                .consumerMainThread(PlayerDeathPacket::handle)
+                .consumerMainThread(PlayerDeathPacket::handler)
                 .add();
     }
 

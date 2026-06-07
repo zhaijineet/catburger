@@ -16,7 +16,7 @@ public class PlayerDeathPacket {
         return new PlayerDeathPacket();
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
+    public void handler(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {

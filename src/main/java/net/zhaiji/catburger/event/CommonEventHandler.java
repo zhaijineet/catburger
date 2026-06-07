@@ -4,7 +4,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemCooldowns;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.zhaiji.catburger.config.CatBurgerCommonConfig;
@@ -30,7 +29,7 @@ public class CommonEventHandler {
                     }
                     foodData.setFoodLevel(CatBurgerCommonConfig.foodRestorationFromTotem);
                     foodData.setSaturation(CatBurgerCommonConfig.saturationRestorationFromTotem);
-                    player.getCooldowns().addCooldown(InitItem.CAT_BURGER.get(), CatBurgerCommonConfig.totemCooldown);
+                    player.getCooldowns().addCooldown(item, CatBurgerCommonConfig.totemCooldown);
                     player.level().broadcastEntityEvent(player, (byte) 35);
                     PacketManager.sendToClient(new PlayerDeathPacket(), (ServerPlayer) player);
                     event.setCanceled(true);

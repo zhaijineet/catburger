@@ -151,6 +151,10 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    mavenLocal()
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
@@ -181,7 +185,9 @@ dependencies {
     implementation(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
     runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
 
-    compileOnly(fg.deobf("curse.maven:touhou-little-maid-355044:7510714"))
+    // compileOnly(fg.deobf("curse.maven:touhou-little-maid-355044:7510714"))
+    // NOTE:需要自行下载到本地的libs，我不传上去了
+    compileOnly(fg.deobf("blank:touhoulittlemaid-1.5.3-forge:mc1.20.1"))
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
