@@ -9,8 +9,9 @@ import net.zhaiji.catburger.item.CatBurgerItem;
 public class InitItem {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CatBurger.MOD_ID);
 
-    public static final DeferredItem<Item> CAT_BURGER = ITEMS.register(
+    public static final DeferredItem<Item> CAT_BURGER = ITEMS.registerItem(
             "cat_burger",
-            CatBurgerItem::new
+            CatBurgerItem::new,
+            properties -> properties.stacksTo(1)
     );
 }

@@ -4,7 +4,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.zhaiji.catburger.CatBurger;
+import net.zhaiji.catburger.network.client.ClientPacketHandler;
 
 public record PlayerDeathPacket() implements CustomPacketPayload {
     public static final Type<PlayerDeathPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(CatBurger.MOD_ID, "player_death_packet"));
@@ -14,5 +16,9 @@ public record PlayerDeathPacket() implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
+    }
+
+    public static void handler(PlayerDeathPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> ClientPacketHandler.handlerPlayerDeathPacket(context.player()));
     }
 }

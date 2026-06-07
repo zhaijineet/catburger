@@ -1,3 +1,4 @@
+// TODO: TLM 更新到 26.1.2 后恢复以下代码
 //package net.zhaiji.catburger.compat;
 //
 //import com.github.tartaricacid.touhoulittlemaid.api.event.MaidDeathEvent;

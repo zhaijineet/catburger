@@ -1,7 +1,6 @@
 package net.zhaiji.catburger.event;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
@@ -18,9 +17,8 @@ public class CommonEventHandler {
     public static void handlerLivingDeathEvent(LivingDeathEvent event) {
         if (!CatBurgerCommonConfig.totemEffectActive) return;
         Item item = InitItem.CAT_BURGER.get();
-        ItemStack cooldownStack = item.getDefaultInstance();
-
-        if (event.getEntity() instanceof Player player && !player.getCooldowns().isOnCooldown(cooldownStack)) {
+        ItemStack itemStack = item.getDefaultInstance();
+        if (event.getEntity() instanceof Player player && !player.getCooldowns().isOnCooldown(itemStack)) {
             CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
                 if (iCuriosItemHandler.findFirstCurio(item).isPresent()) {
                     FoodData foodData = player.getFoodData();
@@ -33,7 +31,7 @@ public class CommonEventHandler {
                     }
                     foodData.setFoodLevel(CatBurgerCommonConfig.foodRestorationFromTotem);
                     foodData.setSaturation(CatBurgerCommonConfig.saturationRestorationFromTotem);
-                    player.getCooldowns().addCooldown(cooldownStack, CatBurgerCommonConfig.totemCooldown);
+                    player.getCooldowns().addCooldown(itemStack, CatBurgerCommonConfig.totemCooldown);
                     player.level().broadcastEntityEvent(player, (byte) 35);
                     PacketDistributor.sendToPlayer((ServerPlayer) player, new PlayerDeathPacket());
                     event.setCanceled(true);
@@ -46,11 +44,10 @@ public class CommonEventHandler {
         if (!CatBurgerCommonConfig.wakeUpCanResetCooldown) return;
         Player player = event.getEntity();
         Item item = InitItem.CAT_BURGER.get();
-        ItemStack cooldownStack = item.getDefaultInstance();
-        Identifier cooldownId = player.getCooldowns().getCooldownGroup(cooldownStack);
+        ItemStack itemStack = item.getDefaultInstance();
         CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
             if (iCuriosItemHandler.findFirstCurio(item).isPresent()) {
-                player.getCooldowns().removeCooldown(cooldownId);
+                player.getCooldowns().removeCooldown(player.getCooldowns().getCooldownGroup(itemStack));
             }
         });
     }
